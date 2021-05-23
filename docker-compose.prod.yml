@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+  frontend:
+    container_name: nfc-frontend
+    build:
+      context: ./app
+    networks:
+      - web
+    restart: always
+    env_file:
+      - "env/.env.prod"
+
+  mongo:
+    image: mongo:4.4.4
+    volumes:
+      - ./docker/mongo:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    env_file:
+      - "env/.env.prod"
+    networks:
+      - web
+  api:
+    build: ./api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    env_file:
+      - "env/.env.prod"
+    networks:
+      - web
+
+#  traefik:
+#    image: traefik:v2.4.8
+#    restart: always
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    networks:
+#      - web
+#    env_file:
+#      - "env/.env.prod"
+
+
+networks:
+  web:
+    driver: bridge
