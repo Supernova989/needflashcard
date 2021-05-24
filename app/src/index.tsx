@@ -1,10 +1,16 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "./assets/styles/index.css";
 import App from "./App";
 import "./i18n";
+import ErrorBoundary from "./components/ErrorBoundary";
 
-ReactDOM.render(
-  <App />,
-  document.getElementById("appMountPoint")
+const output = (
+  <>
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
+  </>
 );
+
+ReactDOM.render(output, document.getElementById("appMountPoint"));

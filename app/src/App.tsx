@@ -1,12 +1,7 @@
 import React from "react";
-import "./App.css";
 
 function App() {
-  return (
-    <div className="App">
-      App works!
-    </div>
-  );
+  return <div className="App text-2xl text-purple-600">App works!</div>;
 }
 
 export default App;
