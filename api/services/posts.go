@@ -3,18 +3,18 @@ package services
 import (
 	"context"
 	"encoding/json"
-	m "nfc-api/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	m "nfc-api/models"
 )
 
 type IPostService interface {
 	Get(string) (*m.Post, error)
 	Find(interface{}) ([]m.Post, error)
 	Insert(m.Post) (*m.Post, error)
-	Update(string, interface{}) (m.RequestUpdate, error)
-	Delete(string) (m.RequestDelete, error)
+	Update(string, interface{}) (m.ResponseUpdate, error)
+	Delete(string) (m.ResponseDelete, error)
 }
 
 type PostService struct {
@@ -52,8 +52,8 @@ func (c *PostService) Find(filter interface{}) ([]m.Post, error) {
 	return posts, nil
 }
 
-func (c *PostService) Insert(docs m.Post) (*m.Post, error) {
-	res, err := c.Col.InsertOne(c.Ctx, docs)
+func (c *PostService) Insert(doc m.Post) (*m.Post, error) {
+	res, err := c.Col.InsertOne(c.Ctx, doc)
 	if err != nil {
 		return nil, err
 	}
@@ -61,8 +61,8 @@ func (c *PostService) Insert(docs m.Post) (*m.Post, error) {
 	return c.Get(id)
 }
 
-func (c *PostService) Update(id string, update interface{}) (m.RequestUpdate, error) {
-	result := m.RequestUpdate{
+func (c *PostService) Update(id string, update interface{}) (m.ResponseUpdate, error) {
+	result := m.ResponseUpdate{
 		ModifiedCount: 0,
 	}
 	_id, err := primitive.ObjectIDFromHex(id)
@@ -101,8 +101,8 @@ func (c *PostService) Update(id string, update interface{}) (m.RequestUpdate, er
 	return result, nil
 }
 
-func (c *PostService) Delete(id string) (m.RequestDelete, error) {
-	result := m.RequestDelete{
+func (c *PostService) Delete(id string) (m.ResponseDelete, error) {
+	result := m.ResponseDelete{
 		DeletedCount: 0,
 	}
 	_id, err := primitive.ObjectIDFromHex(id)

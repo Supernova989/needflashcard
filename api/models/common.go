@@ -1,11 +1,15 @@
 package models
 
-type RequestUpdate struct {
+type RegisterRequest struct {
+	Username string
+}
+
+type ResponseUpdate struct {
 	ModifiedCount int64 `json:"modifiedCount"`
 	Result        interface{}
 }
 
-type RequestDelete struct {
+type ResponseDelete struct {
 	DeletedCount int64 `json:"deletedCount"`
 }
 

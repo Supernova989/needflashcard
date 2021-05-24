@@ -14,12 +14,19 @@ import (
 func main() {
 	database.Initialize()
 
+	userService := &services.UserService{
+		Col: database.GetDB().Collection(config.GetConfig().Mongo.Collections.Users),
+		Ctx: database.GetGlobalContext(),
+	}
+
 	postService := &services.PostService{
 		Col: database.GetDB().Collection(config.GetConfig().Mongo.Collections.Posts),
 		Ctx: database.GetGlobalContext(),
 	}
 
 	r := mux.NewRouter()
+
+	r.HandleFunc("/api/v1/register", controllers.RegisterUser(userService)).Methods("POST")
 
 	r.HandleFunc("/posts", controllers.FindPosts(postService)).Methods("GET")
 	r.HandleFunc("/posts/{id}", controllers.GetPost(postService)).Methods("GET")
