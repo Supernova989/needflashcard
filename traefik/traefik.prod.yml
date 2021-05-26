@@ -1,0 +1,39 @@
+api:
+  dashboard: true
+  debug: false
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: proxy-net
+  file:
+    filename: /configurations/dynamic.yml
+
+entryPoints:
+  web:
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+  websecure:
+    address: :443
+    http:
+      tls:
+        certResolver: letsencrypt
+
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      storage: acme.json
+      keyType: EC384
+      httpChallenge:
+        entryPoint: web
+#     email: example.com
+#     caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+
+accessLog:
+  filePath: "/logs/access.log"
+log:
+  filePath: "/logs/logs.log"

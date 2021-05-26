@@ -34,8 +34,8 @@ func main() {
 	r.HandleFunc("/posts/{id}", controllers.PatchPost(postService)).Methods("PATCH")
 	r.HandleFunc("/posts/{id}", controllers.DeletePost(postService)).Methods("DELETE")
 
-	log.Println(fmt.Sprintf("App's running on port: 8080"))
-	if err := http.ListenAndServe(":8080", r); err != nil {
+	log.Println(fmt.Sprintf("App's running on port: 3010"))
+	if err := http.ListenAndServe(":3010", r); err != nil {
 		panic(err)
 	}
 }

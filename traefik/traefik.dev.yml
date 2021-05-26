@@ -1,0 +1,18 @@
+api:
+  dashboard: true
+  debug: true
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    network: proxy-net
+
+entryPoints:
+  web:
+    address: :80
+
+accessLog:
+  filePath: "/logs/access.log"
+log:
+  filePath: "/logs/logs.log"

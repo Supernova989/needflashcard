@@ -5,7 +5,8 @@ node_modules
 .vscode
 .tmp
 
-/env
+.env
 
-/docker
+/traefik/acme.json
+/docker/*
 !.gitkeep
