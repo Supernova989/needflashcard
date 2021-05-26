@@ -45,4 +45,5 @@ if [ -f "$ACME_JSON" ] ; then
 else
    echo "Writing empty acme.json..."
    touch "$ACME_JSON"
+   chmod 666 "$ACME_JSON"
 fi
