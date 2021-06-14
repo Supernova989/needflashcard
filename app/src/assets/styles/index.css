@@ -5,3 +5,117 @@
 body {
   font-family: "Open Sans", sans-serif;
 }
+
+.button {
+  @apply transition-colors;
+  padding: 0.3rem 0.7rem;
+}
+
+.button:focus {
+  @apply outline-none;
+}
+.input, .textarea {
+  @apply transition;
+  @apply border;
+  @apply border-gray-200;
+}
+.input:focus, .textarea:focus {
+  @apply border-gray-600;
+  @apply outline-none;
+}
+
+.input-text {
+  @apply py-1;
+  @apply px-1;
+  width: 100%;
+}
+
+.button.button-primary {
+  @apply bg-blue-600;
+  @apply text-white;
+  @apply border-blue-900;
+  @apply border;
+}
+.button.button-primary:hover {
+  @apply bg-blue-500;
+}
+
+.sidebar {
+  @apply flex-shrink-0;
+  @apply px-2;
+  width: 200px;
+}
+.content, .sidebar {
+  @apply py-2;
+  
+}
+.collection-outer {
+  width: 100%;
+}
+.collection-inner {
+  @apply py-3;
+  @apply bg-yellow-50;
+  @apply border;
+  @apply transition;
+  @apply border-yellow-100;
+  @apply cursor-pointer;
+  padding-bottom: 2rem;
+  position: relative;
+  height: 100%;
+}
+.collection-inner:hover {
+  @apply bg-yellow-100;
+}
+.collection-inner, .collection-inner footer {
+  @apply px-3;
+}
+.collection-inner .title {
+  @apply font-bold;
+}
+.collection-inner .description {
+  @apply text-sm;
+}
+.collection-inner footer {
+  @apply flex;
+  @apply justify-between;
+  position: absolute;
+  left: 0;
+  bottom: 1rem;
+  width: 100%;
+}
+.collection-inner footer sub {
+  @apply text-gray-400;
+}
+
+.searchbar {
+  @apply flex;
+  @apply items-center;
+}
+.searchbar .input {
+  @apply flex-1;
+}
+.searchbar .button {
+  @apply flex-shrink-0;
+}
+@media (min-width: 1546px) {
+
+}
+@media (min-width: 1280px) {
+  .collection-outer {
+    width: 49%;
+  }
+  .collection-inner .title {
+    @apply truncate;
+  }
+}
+@media (min-width: 1024px) {
+
+}
+@media (min-width: 768px) {
+
+}
+@media (min-width: 640px) {
+
+}
+
+

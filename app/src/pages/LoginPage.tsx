@@ -1,5 +1,4 @@
 import { FC, useEffect } from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
 
 interface Props {
   referer?: string
