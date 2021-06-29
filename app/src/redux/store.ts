@@ -1,15 +1,19 @@
-import { compose, createStore, applyMiddleware } from "redux";
-import thunkMiddleware from "redux-thunk";
-import reducers from "./reducers";
+import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import { reducer as authReducer } from "./reducers/@auth";
+import logger from "redux-logger";
 
-let composeEnhancers;
+const reducer = {
+  auth: authReducer,
+};
 
-if (process.env.NODE_ENV !== "production" && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
-  composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
-} else {
-  composeEnhancers = compose;
-}
+const store = configureStore({
+  reducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+  devTools: process.env.NODE_ENV !== "production",
+});
 
-const store = createStore(reducers, undefined, composeEnhancers(applyMiddleware(thunkMiddleware)));
+export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>;
 
 export default store;

@@ -19,8 +19,8 @@ const useStyles = createUseStyles({
     color: "#4B4B4B",
     transition: `ease 200ms`,
     "&:hover": {
-      color: "#878787"
-    }
+      color: "#878787",
+    },
   },
   clickAwayListener: {
     zIndex: 9,
@@ -29,7 +29,7 @@ const useStyles = createUseStyles({
     top: 0,
     right: 0,
     bottom: 0,
-    cursor: "pointer"
+    cursor: "pointer",
   },
   mobileMenu: {
     zIndex: 10,
@@ -39,12 +39,12 @@ const useStyles = createUseStyles({
     background: "#CECECE",
     padding: 10,
     opacity: 0,
-    transform: `translateX(-${MOBILE_MENU_WIDTH}px)`
+    transform: `translateX(-${MOBILE_MENU_WIDTH}px)`,
   },
   menuOpen: {
     opacity: 1,
-    transform: `translateX(0)`
-  }
+    transform: `translateX(0)`,
+  },
 });
 
 const BasicLayout: FC = ({ children }) => {
@@ -52,7 +52,7 @@ const BasicLayout: FC = ({ children }) => {
   const [mobileLayout, setMobileLayout] = useState<boolean>(false);
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
   const [clientW, clientH] = useWindowSize();
-  
+
   useEffect(() => {
     const isMobile = clientW <= MOBILE_BREAKPOINT;
     setMobileLayout(isMobile);
@@ -60,64 +60,75 @@ const BasicLayout: FC = ({ children }) => {
       setShowMobileMenu(false);
     }
   }, [clientW]);
-  
+
   const handleCloseMenu = () => {
-    setShowMobileMenu(false)
+    setShowMobileMenu(false);
   };
-  
-  const menuButton = <svg
-    className={clsx(classes.menuButton)}
-    role="button"
-    onClick={() => setShowMobileMenu(!showMobileMenu)}
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 448 512">
-    <path fill="currentColor"
-          d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z" />
-  </svg>;
-  
-  const headerMenu = <nav role="navigation">
-    <Link to={ROUTES.GROUPS}>Your Collections</Link>
-    <Link to={ROUTES.PROFILE}>Profile</Link>
-  </nav>;
-  
-  const mobileMenu = <>
-    <div className={clsx(classes.mobileMenu, { [classes.menuOpen]: showMobileMenu })}>
-      <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium alias animi autem culpa excepturi, in
-        incidunt minima nemo numquam quas, quibusdam quis sunt voluptate. Asperiores esse expedita officia perspiciatis
-        tempora.
+
+  const menuButton = (
+    <svg
+      className={clsx(classes.menuButton)}
+      role="button"
+      onClick={() => setShowMobileMenu(!showMobileMenu)}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 448 512"
+    >
+      <path
+        fill="currentColor"
+        d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+      />
+    </svg>
+  );
+
+  const headerMenu = (
+    <nav role="navigation">
+      <Link to={ROUTES.GROUPS}>Your Collections</Link>
+      <Link to={ROUTES.PROFILE}>Profile</Link>
+    </nav>
+  );
+
+  const mobileMenu = (
+    <>
+      <div className={clsx(classes.mobileMenu, { [classes.menuOpen]: showMobileMenu })}>
+        <div>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium alias animi autem culpa excepturi, in
+          incidunt minima nemo numquam quas, quibusdam quis sunt voluptate. Asperiores esse expedita officia
+          perspiciatis tempora.
+        </div>
+        <div>
+          Accusamus hic iure, quibusdam ratione reiciendis tempore? Accusantium asperiores autem cumque cupiditate
+          distinctio doloremque dolorum eos et ex fugiat, ipsum laboriosam quae, quaerat quam quisquam repellendus sequi
+          sunt temporibus voluptate!
+        </div>
+        <div>
+          Amet atque beatae, cupiditate dignissimos eaque eos ex, fuga fugit id ipsa ipsam iste nisi non optio
+          praesentium quasi quibusdam quo ratione recusandae reiciendis sed sequi sint ullam vel voluptatum.
+        </div>
+        <div>
+          Eum, quam, voluptatum. Consequatur dicta, dolorum eos esse, eum exercitationem nam nemo neque nihil nisi omnis
+          quaerat quos sit totam voluptatibus. Autem distinctio, id illum magnam minima non quibusdam temporibus.
+        </div>
+        <div>
+          Commodi consectetur consequatur deserunt eaque explicabo optio perferendis quisquam recusandae vel voluptatem.
+          Accusamus asperiores est eum harum illum ipsa, laudantium magnam quam quibusdam recusandae sed sequi sunt
+          ullam vitae voluptatem?
+        </div>
       </div>
-      <div>Accusamus hic iure, quibusdam ratione reiciendis tempore? Accusantium asperiores autem cumque cupiditate
-        distinctio doloremque dolorum eos et ex fugiat, ipsum laboriosam quae, quaerat quam quisquam repellendus sequi
-        sunt temporibus voluptate!
-      </div>
-      <div>Amet atque beatae, cupiditate dignissimos eaque eos ex, fuga fugit id ipsa ipsam iste nisi non optio
-        praesentium quasi quibusdam quo ratione recusandae reiciendis sed sequi sint ullam vel voluptatum.
-      </div>
-      <div>Eum, quam, voluptatum. Consequatur dicta, dolorum eos esse, eum exercitationem nam nemo neque nihil nisi
-        omnis
-        quaerat quos sit totam voluptatibus. Autem distinctio, id illum magnam minima non quibusdam temporibus.
-      </div>
-      <div>Commodi consectetur consequatur deserunt eaque explicabo optio perferendis quisquam recusandae vel
-        voluptatem.
-        Accusamus asperiores est eum harum illum ipsa, laudantium magnam quam quibusdam recusandae sed sequi sunt ullam
-        vitae voluptatem?
-      </div>
-    </div>
-    {showMobileMenu && <div className={clsx(classes.clickAwayListener)} onClick={handleCloseMenu} />}
-  </>;
+      {showMobileMenu && <div className={clsx(classes.clickAwayListener)} onClick={handleCloseMenu} />}
+    </>
+  );
   return (
     <>
       {mobileLayout && mobileMenu}
-      
+
       <header className="bg-gray-200 pb-2 pt-2 mb-3">
         <div className="container flex items-center justify-between mx-auto px-3">
           {mobileLayout && menuButton}
-          
+
           <Link to={ROUTES.INDEX}>NeedFlashcard</Link>
           {/*<Button variant={"contained"} color={"primary"} className={"ml-1"}>Get started</Button>*/}
-          
+
           {!mobileLayout && headerMenu}
-        
         </div>
       </header>
       <main>
@@ -130,16 +141,11 @@ const BasicLayout: FC = ({ children }) => {
           {/*  </ul>*/}
           {/*</aside>*/}
           <div className={"content flex-1"}>
-            <Suspense fallback={<PageLoadFallback />}>
-              {children}
-            </Suspense>
+            <Suspense fallback={<PageLoadFallback />}>{children}</Suspense>
           </div>
         </div>
-      
       </main>
-      <footer>
-      
-      </footer>
+      <footer></footer>
     </>
   );
 };

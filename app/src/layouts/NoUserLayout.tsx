@@ -6,18 +6,11 @@ import PageLoadFallback from "../components/PageLoadFallback";
 const NoUserLayout: FC = ({ children }) => {
   return (
     <>
-      <header>
-      
-      
-      </header>
+      <header></header>
       <main>
-        <Suspense fallback={<PageLoadFallback />}>
-          {children}
-        </Suspense>
+        <Suspense fallback={<PageLoadFallback />}>{children}</Suspense>
       </main>
-      <footer>
-      
-      </footer>
+      <footer></footer>
     </>
   );
 };

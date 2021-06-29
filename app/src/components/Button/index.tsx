@@ -5,10 +5,10 @@ type ButtonVariant = "contained" | "outlined";
 type ButtonColor = "primary" | "secondary" | "success" | "warning" | "danger";
 
 interface Props {
-  isDisabled?: boolean,
-  className?: string,
-  variant: ButtonVariant,
-  color: ButtonColor,
+  isDisabled?: boolean;
+  className?: string;
+  variant: ButtonVariant;
+  color: ButtonColor;
 }
 
 const Button: FC<Props> = (props) => {
@@ -21,10 +21,9 @@ const Button: FC<Props> = (props) => {
   );
 };
 
-
 Button.defaultProps = {
   isDisabled: false,
-  className: ""
+  className: "",
 };
 
 export default Button;

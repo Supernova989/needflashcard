@@ -14,12 +14,14 @@ body {
 .button:focus {
   @apply outline-none;
 }
-.input, .textarea {
+.input,
+.textarea {
   @apply transition;
   @apply border;
   @apply border-gray-200;
 }
-.input:focus, .textarea:focus {
+.input:focus,
+.textarea:focus {
   @apply border-gray-600;
   @apply outline-none;
 }
@@ -45,9 +47,9 @@ body {
   @apply px-2;
   width: 200px;
 }
-.content, .sidebar {
+.content,
+.sidebar {
   @apply py-2;
-  
 }
 .collection-outer {
   width: 100%;
@@ -66,7 +68,8 @@ body {
 .collection-inner:hover {
   @apply bg-yellow-100;
 }
-.collection-inner, .collection-inner footer {
+.collection-inner,
+.collection-inner footer {
   @apply px-3;
 }
 .collection-inner .title {
@@ -98,7 +101,6 @@ body {
   @apply flex-shrink-0;
 }
 @media (min-width: 1546px) {
-
 }
 @media (min-width: 1280px) {
   .collection-outer {
@@ -109,13 +111,8 @@ body {
   }
 }
 @media (min-width: 1024px) {
-
 }
 @media (min-width: 768px) {
-
 }
 @media (min-width: 640px) {
-
 }
-
-

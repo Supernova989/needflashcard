@@ -5,5 +5,5 @@ export const ROUTES = {
   GROUP: "/groups/:id",
   GROUPS: "/groups",
   PROFILE: "/profile",
-  ABOUT: "/about"
+  ABOUT: "/about",
 } as const;

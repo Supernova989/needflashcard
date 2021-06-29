@@ -6,14 +6,20 @@ import "./i18n";
 import store from "./redux/store";
 import { Provider } from "react-redux";
 import ErrorBoundary from "./components/ErrorBoundary";
+import history from "./history";
+import { Router } from "react-router-dom";
 
 const output = (
   <>
-    <ErrorBoundary>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </ErrorBoundary>
+    <React.StrictMode>
+      <ErrorBoundary>
+        <Provider store={store}>
+          <Router history={history}>
+            <App />
+          </Router>
+        </Provider>
+      </ErrorBoundary>
+    </React.StrictMode>
   </>
 );
 

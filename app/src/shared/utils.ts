@@ -18,6 +18,10 @@ export function getGroupURL(id: string): string {
   return ROUTES.GROUP.replace(/:id/, id);
 }
 
+export function removeTrailingSlash(url?: string): string {
+  return (url || "").trim().replace(/(\/)*$/, "");
+}
+
 export function shuffle(arr: Array<any> = []) {
   const _arr = [...arr];
   for (let i = 0; i < arr.length; i++) {
@@ -28,3 +32,7 @@ export function shuffle(arr: Array<any> = []) {
   }
   return _arr;
 }
+
+export const delay = (ms: number = 100): Promise<void> => {
+  return new Promise<void>((resolve) => setTimeout(() => resolve(), ms));
+};
