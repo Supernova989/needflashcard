@@ -9,13 +9,15 @@ interface Props {
   className?: string;
   variant: ButtonVariant;
   color: ButtonColor;
+  type?: "submit" | "reset" | "button";
+  [x: string]: any;
 }
 
 const Button: FC<Props> = (props) => {
-  const { children, className, color } = props;
+  const { children, className, color, type, isDisabled, ...rest } = props;
 
   return (
-    <button type="button" className={clsx(className, "button", "button-" + color)}>
+    <button type={type} {...rest} className={clsx(className, "button", "button-" + color)} disabled={isDisabled}>
       {children}
     </button>
   );
@@ -24,6 +26,7 @@ const Button: FC<Props> = (props) => {
 Button.defaultProps = {
   isDisabled: false,
   className: "",
+  type: "button",
 };
 
 export default Button;

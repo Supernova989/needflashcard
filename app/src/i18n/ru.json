@@ -1,0 +1,12 @@
+{
+  "BUTTONS": {
+    "LOGIN": "Логин",
+    "CONFIRM": "Подтвердить",
+    "CANCEL": "Отмена",
+    "OK": "OK"
+  },
+  "COMMON": {
+    "EMAIL": "Email",
+    "PASSWORD": "Пароль"
+  }
+}

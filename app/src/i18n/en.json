@@ -1,1 +1,12 @@
-{}
+{
+  "BUTTONS": {
+    "LOGIN": "Login",
+    "CONFIRM": "Confirm",
+    "CANCEL": "Cancel",
+    "OK": "OK"
+  },
+  "COMMON": {
+    "EMAIL": "Email",
+    "PASSWORD": "Password"
+  }
+}
