@@ -7,6 +7,8 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
+import { RouteComponentProps, RouteProps, withRouter } from "react-router-dom";
+import { ROUTES } from "../routes";
 
 interface Props {
   referer?: string;
@@ -17,12 +19,12 @@ export const loginSchema = Yup.object().shape({
   password: Yup.string().min(6, "Too Short!").max(20, "Too Long!").required("Required"),
 });
 
-const LoginPage: FC<Props> = ({ referer }) => {
+const LoginPage: FC<RouteComponentProps & Props> = ({ referer, history }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
 
   return (
-    <div data-testid="page">
+    <div data-testid="page-login">
       I am LoginPage. <br />
       From: {referer}
       <br />
@@ -30,7 +32,12 @@ const LoginPage: FC<Props> = ({ referer }) => {
         initialValues={{ email: "", password: "" }}
         validationSchema={loginSchema}
         onSubmit={({ email, password }, actions) => {
-          dispatch(authenticateUser(email, password));
+          dispatch(authenticateUser(email, password)).then((success) => {
+            if (!success) {
+              return;
+            }
+            history.push(ROUTES.INDEX);
+          });
         }}
       >
         {({ values, touched, errors, ...props }) => (
@@ -77,4 +84,4 @@ const LoginPage: FC<Props> = ({ referer }) => {
   );
 };
 
-export default LoginPage;
+export default withRouter(LoginPage);

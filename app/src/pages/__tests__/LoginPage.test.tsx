@@ -36,20 +36,19 @@ jest.mock("react-i18next", () => ({
 }));
 
 describe("Page Login", () => {
-  const store = configureStore({ reducer: rootReducer });
-  const validEmail = "user@domain.com";
-  const password = "aVeryGoodPassword";
+  const validEmailValue = "user@domain.com";
+  const passwordValue = "aVeryGoodPassword";
 
-  test("Renders page with form on it", async () => {
+  test("Should render page with form elements on it", async () => {
     const container = render(
-      <RTW store={store}>
+      <RTW>
         <MemoryRouter initialEntries={[ROUTES.LOGIN]}>
           <App />
         </MemoryRouter>
       </RTW>
     );
 
-    await waitFor(() => screen.getByTestId("page"));
+    await waitFor(() => screen.getByTestId("page-login"));
 
     const emailInput = container.getByTestId("email-input");
     const pwdInput = screen.getByTestId("password-input");
@@ -60,7 +59,9 @@ describe("Page Login", () => {
     expect(button).toBeInTheDocument();
   });
 
-  test("Opens HOME page when entering valid credentials", async () => {
+  test("Should receive token and store it in redux storage", async () => {
+    const store = configureStore({ reducer: rootReducer });
+
     const container = render(
       <RTW store={store}>
         <MemoryRouter initialEntries={[ROUTES.LOGIN]}>
@@ -68,17 +69,17 @@ describe("Page Login", () => {
         </MemoryRouter>
       </RTW>
     );
-    await waitFor(() => screen.getByTestId("page"));
+    await waitFor(() => screen.getByTestId("page-login"));
 
     const emailInput = container.getByTestId("email-input");
     const pwdInput = screen.getByTestId("password-input");
     const button = screen.getByTestId("login-btn");
 
     await waitFor(() => {
-      fireEvent.change(emailInput, { target: { value: validEmail } });
+      fireEvent.change(emailInput, { target: { value: validEmailValue } });
     });
     await waitFor(() => {
-      fireEvent.change(pwdInput, { target: { value: password } });
+      fireEvent.change(pwdInput, { target: { value: passwordValue } });
     });
     await waitFor(() => {
       fireEvent.click(button);
@@ -87,5 +88,36 @@ describe("Page Login", () => {
     await delay(200);
 
     expect(store.getState().auth.token).toBe(token);
+  });
+
+  test("Should redirect to HOME page when entering valid credentials", async () => {
+    const store = configureStore({ reducer: rootReducer });
+
+    const container = render(
+      <RTW store={store}>
+        <MemoryRouter initialEntries={[ROUTES.INDEX]}>
+          <App />
+        </MemoryRouter>
+      </RTW>
+    );
+    await waitFor(() => screen.getByTestId("page-login"));
+
+    const emailInput = container.getByTestId("email-input");
+    const pwdInput = screen.getByTestId("password-input");
+    const button = screen.getByTestId("login-btn");
+
+    await waitFor(() => {
+      fireEvent.change(emailInput, { target: { value: validEmailValue } });
+    });
+    await waitFor(() => {
+      fireEvent.change(pwdInput, { target: { value: passwordValue } });
+    });
+    await waitFor(() => {
+      fireEvent.click(button);
+    });
+
+    await delay(200);
+
+    expect(screen.getByTestId("page-home")).toBeInTheDocument();
   });
 });

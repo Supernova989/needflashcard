@@ -10,7 +10,7 @@ const GroupPage: FC<RouteComponentProps<Props>> = ({ match }) => {
     params: { id },
   } = match!;
 
-  return <div>I am GroupPage ({id})</div>;
+  return <div data-testid="group-page">I am GroupPage ({id})</div>;
 };
 
 export default withRouter(GroupPage);
