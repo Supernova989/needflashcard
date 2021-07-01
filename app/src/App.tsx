@@ -6,13 +6,14 @@ import NoUserLayout from "./layouts/NoUserLayout";
 import PrivateRoute from "./components/PrivateRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
+import LoginLayout from "./layouts/LoginLayout";
+import AboutPage from "./pages/AboutPage";
 
 const IndexPage = lazy(() => import("./pages/IndexPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const GroupPage = lazy(() => import("./pages/GroupPage"));
 const GroupsPage = lazy(() => import("./pages/GroupsPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
-const AboutPage = lazy(() => import("./pages/AboutPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App: FC = () => {
@@ -25,9 +26,9 @@ const App: FC = () => {
           path={ROUTES.LOGIN}
           component={(props: RouteComponentProps<{}, {}, { referer?: string }>) => {
             const page = (
-              <NoUserLayout>
+              <LoginLayout>
                 <LoginPage referer={props?.location?.state?.referer} />
-              </NoUserLayout>
+              </LoginLayout>
             );
             return !isAuthorized ? page : <Redirect to={ROUTES.INDEX} />;
           }}
@@ -69,13 +70,13 @@ const App: FC = () => {
             </BasicLayout>
           )}
         />
-        <PrivateRoute
+        <Route
           path={ROUTES.ABOUT}
           exact
           component={() => (
-            <BasicLayout>
+            <NoUserLayout>
               <AboutPage />
-            </BasicLayout>
+            </NoUserLayout>
           )}
         />
         <Route

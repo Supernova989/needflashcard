@@ -2,34 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes scale-in {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  55% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  75% {
+    transform: scale(0.6);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes revolve {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
 body {
   font-family: "Open Sans", sans-serif;
 }
 
+.link {
+  @apply text-blue-700;
+}
 .button {
   @apply transition-colors;
-  padding: 0.3rem 0.7rem;
 }
 
 .button:focus {
   @apply outline-none;
-}
-.input,
-.textarea {
-  @apply transition;
-  @apply border;
-  @apply border-gray-200;
-}
-.input:focus,
-.textarea:focus {
-  @apply border-gray-600;
-  @apply outline-none;
-}
-
-.input-text {
-  @apply py-1;
-  @apply px-1;
-  width: 100%;
 }
 
 .button.button-primary {
@@ -47,6 +66,25 @@ body {
   @apply border-gray-200;
   @apply border;
   @apply cursor-default;
+}
+.login-sidebar {
+  @apply transition;
+  transition-property: width;
+  position: absolute;
+  z-index: 10;
+  max-width: 100%;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #bababac7;
+  border-right: 1px solid #57575790;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+}
+.login-sidebar form {
+  @apply px-2;
 }
 
 .sidebar {
@@ -97,16 +135,6 @@ body {
   @apply text-gray-400;
 }
 
-.searchbar {
-  @apply flex;
-  @apply items-center;
-}
-.searchbar .input {
-  @apply flex-1;
-}
-.searchbar .button {
-  @apply flex-shrink-0;
-}
 @media (min-width: 1546px) {
 }
 @media (min-width: 1280px) {
@@ -120,6 +148,9 @@ body {
 @media (min-width: 1024px) {
 }
 @media (min-width: 768px) {
+  .login-sidebar {
+    width: 400px;
+  }
 }
 @media (min-width: 640px) {
 }

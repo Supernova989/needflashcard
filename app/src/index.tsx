@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import ErrorBoundary from "./components/ErrorBoundary";
 import history from "./history";
 import { Router } from "react-router-dom";
+import "./jss";
 
 const output = (
   <>

@@ -7,8 +7,9 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
-import { RouteComponentProps, RouteProps, withRouter } from "react-router-dom";
+import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { ROUTES } from "../routes";
+import Input from "../components/Input";
 
 interface Props {
   referer?: string;
@@ -24,62 +25,78 @@ const LoginPage: FC<RouteComponentProps & Props> = ({ referer, history }) => {
   const { t } = useTranslation();
 
   return (
-    <div data-testid="page-login">
-      I am LoginPage. <br />
-      From: {referer}
-      <br />
-      <Formik
-        initialValues={{ email: "", password: "" }}
-        validationSchema={loginSchema}
-        onSubmit={({ email, password }, actions) => {
-          dispatch(authenticateUser(email, password)).then((success) => {
-            if (!success) {
-              return;
-            }
-            history.push(ROUTES.INDEX);
-          });
-        }}
-      >
-        {({ values, touched, errors, ...props }) => (
-          <form autoComplete="off" autoCorrect="off" onSubmit={props.handleSubmit}>
-            <input
-              data-testid="email-input"
-              name="email"
-              className={clsx({ touched: touched.email })}
-              type="email"
-              placeholder={t("COMMON.EMAIL")}
-              onChange={props.handleChange}
-              onBlur={props.handleBlur}
-              value={values.email}
-            />
-            {touched.email && errors.email}
-            <br />
-            <input
-              data-testid="password-input"
-              name="password"
-              className={clsx({ touched: touched.password })}
-              type="password"
-              placeholder={t("COMMON.PASSWORD")}
-              onChange={props.handleChange}
-              onBlur={props.handleBlur}
-              value={values.password}
-            />
-            {touched.password && errors.password}
-
-            <Button
-              data-testid="login-btn"
-              type="submit"
-              isDisabled={false}
-              color="primary"
-              variant="contained"
-              onClick={props.validateForm}
-            >
-              {t("BUTTONS.LOGIN")}
-            </Button>
-            <br />
-          </form>
-        )}
-      </Formik>
+    <div className="relative min-h-screen" data-testid="page-login">
+      <aside className="login-sidebar">
+        <div>
+        
+        </div>
+        
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          validationSchema={loginSchema}
+          onSubmit={({ email, password }, actions) => {
+            dispatch(authenticateUser(email, password)).then((success) => {
+              if (!success) {
+                return;
+              }
+              history.push(ROUTES.INDEX);
+            });
+          }}
+        >
+          {({ values, touched, errors, ...props }) => (
+            <form autoComplete="off" autoCorrect="off" onSubmit={props.handleSubmit}>
+              <Input
+                testId="email-input"
+                name="email"
+                className={clsx("mb-1")}
+                type="email"
+                placeholder={t("COMMON.EMAIL")}
+                onChange={props.handleChange}
+                onBlur={props.handleBlur}
+                value={values.email}
+                error={errors.email}
+                touched={touched.email}
+                block={true}
+              />
+        
+        
+              <Input
+                testId="password-input"
+                name="password"
+                className={clsx("mb-1")}
+                type="password"
+                placeholder={t("COMMON.PASSWORD")}
+                onChange={props.handleChange}
+                onBlur={props.handleBlur}
+                value={values.password}
+                error={errors.password}
+                touched={touched.password}
+                block={true}
+              />
+        
+              <div className="flex sm:justify-between sm:flex-row flex-col-reverse items-center">
+                <Link className="link font-semibold sm:mt-0 mt-2 sm:w-auto text-center" to={ROUTES.FORGOT_PASSWORD}>Forgot password?</Link>
+                <Button
+                  className="w-full sm:w-auto"
+                  data-testid="login-btn"
+                  type="submit"
+                  isDisabled={false}
+                  color="primary"
+                  variant="contained"
+                  onClick={props.validateForm}
+                >
+                  {t("BUTTONS.LOGIN")}
+                </Button>
+              </div>
+            </form>
+          )}
+        </Formik>
+        
+        <div>
+        
+        </div>
+        
+      </aside>
     </div>
   );
 };

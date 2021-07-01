@@ -6,4 +6,5 @@ export const ROUTES = {
   GROUPS: "/groups",
   PROFILE: "/profile",
   ABOUT: "/about",
+  FORGOT_PASSWORD: "/forgot",
 } as const;

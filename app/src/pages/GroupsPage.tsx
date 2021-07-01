@@ -3,6 +3,9 @@ import moment from "moment";
 import { getGroupURL } from "../shared/utils";
 import history from "../history";
 import Button from "../components/Button";
+import Input from "../components/Input";
+import { Formik } from "formik";
+import * as Yup from "yup";
 
 export interface Group {
   id: string;
@@ -49,6 +52,10 @@ const groups: Group[] = [
   },
 ];
 
+export const searchSchema = Yup.object().shape({
+  query: Yup.string().min(2, "Too Short!").max(120, "Too Long!"),
+});
+
 const GroupsPage: FC = () => {
   const handleLink = (id: string) => () => history.push(getGroupURL(id));
 
@@ -57,12 +64,37 @@ const GroupsPage: FC = () => {
       <h1 className="mb-4">Your collections</h1>
 
       <div className={"mb-3"}>
-        <form className="searchbar" autoComplete="off" autoCorrect="off" spellCheck={"false"}>
-          <input type="text" placeholder={"Enter your search query here..."} className={"input input-text"} />
-          <Button variant={"contained"} color={"primary"} className={"ml-2"}>
-            Search
-          </Button>
-        </form>
+        <Formik
+          initialValues={{query: ""}}
+          validationSchema={searchSchema}
+          onSubmit={({query}, actions) => {
+          
+          }}
+        >
+          {({ values, touched, errors, ...props }) => (
+            <form className="searchbar" autoComplete="off" autoCorrect="off" spellCheck={"false"}>
+              <Input
+                name="query"
+                label={"Enter your search query here..."}
+                block={true}
+                onChange={props.handleChange}
+                onBlur={props.handleBlur}
+                value={values.query}
+                error={errors.query}
+                touched={touched.query}
+              />
+    
+              <Button
+                type="submit"
+                variant={"contained"}
+                color={"primary"}
+              >
+                Search
+              </Button>
+            </form>
+          )}
+        </Formik>
+        
       </div>
 
       <ul className={"flex flex-wrap justify-between"}>
