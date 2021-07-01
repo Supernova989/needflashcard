@@ -19,10 +19,10 @@ export const loginSchema = Yup.object().shape({
 
 const LoginPage: FC<Props> = ({ referer }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [t] = useTranslation();
+  const { t } = useTranslation();
 
   return (
-    <div>
+    <div data-testid="page">
       I am LoginPage. <br />
       From: {referer}
       <br />
@@ -36,6 +36,7 @@ const LoginPage: FC<Props> = ({ referer }) => {
         {({ values, touched, errors, ...props }) => (
           <form autoComplete="off" autoCorrect="off" onSubmit={props.handleSubmit}>
             <input
+              data-testid="email-input"
               name="email"
               className={clsx({ touched: touched.email })}
               type="email"
@@ -47,6 +48,7 @@ const LoginPage: FC<Props> = ({ referer }) => {
             {touched.email && errors.email}
             <br />
             <input
+              data-testid="password-input"
               name="password"
               className={clsx({ touched: touched.password })}
               type="password"
@@ -57,7 +59,14 @@ const LoginPage: FC<Props> = ({ referer }) => {
             />
             {touched.password && errors.password}
 
-            <Button type="submit" isDisabled={false} color="primary" variant="contained" onClick={props.validateForm}>
+            <Button
+              data-testid="login-btn"
+              type="submit"
+              isDisabled={false}
+              color="primary"
+              variant="contained"
+              onClick={props.validateForm}
+            >
               {t("BUTTONS.LOGIN")}
             </Button>
             <br />

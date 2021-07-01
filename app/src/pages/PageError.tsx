@@ -35,7 +35,7 @@ const useStyles = createUseStyles({
 
 const ErrorPage: FC = () => {
   const classes = useStyles();
-  const [t] = useTranslation();
+  const { t } = useTranslation();
   return (
     <>
       <div className={classes.root}>

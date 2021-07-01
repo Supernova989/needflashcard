@@ -2,12 +2,12 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import { reducer as authReducer } from "./reducers/@auth";
 import logger from "redux-logger";
 
-const reducer = {
+export const rootReducer = {
   auth: authReducer,
 };
 
 const store = configureStore({
-  reducer,
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
   devTools: process.env.NODE_ENV !== "production",
 });
