@@ -2,14 +2,13 @@ import { FC } from "react";
 import clsx from "clsx";
 import { createUseStyles } from "react-jss";
 
-
 const useStyles = createUseStyles({
   root: {
     display: "inline-flex",
     alignItems: "center",
     transition: "ease-out 250ms",
     position: "relative",
-    paddingBottom: "1.1rem"
+    paddingBottom: "1.1rem",
   },
   input: {
     fontSize: "100%",
@@ -28,7 +27,7 @@ const useStyles = createUseStyles({
     },
     "&:focus": {
       border: "1px solid rgba(0, 0, 0, .9)",
-    }
+    },
   },
   error: {
     display: "block",
@@ -43,44 +42,44 @@ const useStyles = createUseStyles({
     width: "100%",
     overflow: "hidden",
     textOverflow: "ellipsis",
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
   },
   notEmpty: {
     border: "1px solid rgba(0, 0, 0, .9)",
   },
   block: {
-    width: "100%"
-  }
+    width: "100%",
+  },
 });
 
 interface Props {
-  name: string,
-  label?: string,
-  id?: string,
-  value?: string,
-  error?: string,
-  disabled?: boolean,
-  className?: string,
-  touched?: boolean,
-  block?: boolean,
-  type?: "text" | "password" | "email",
-  testId?: string,
-  [s: string]: any
+  name: string;
+  label?: string;
+  id?: string;
+  value?: string;
+  error?: string;
+  disabled?: boolean;
+  className?: string;
+  touched?: boolean;
+  block?: boolean;
+  type?: "text" | "password" | "email";
+  testId?: string;
+  [s: string]: any;
 }
 
 const Input: FC<Props> = (props) => {
-  const {name, id, block, touched, testId, disabled, className, error, type, value, label, ...rest} = props;
+  const { name, id, block, touched, testId, disabled, className, error, type, value, label, ...rest } = props;
   const classes = useStyles();
-  
+
   return (
-    <div className={clsx(className, classes.root, {[classes.block]: block})}>
+    <div className={clsx(className, classes.root, { [classes.block]: block })}>
       <div className={clsx(classes.block)}>
         <input
           autoCorrect="off"
           autoComplete="off"
           id={id}
           placeholder={label}
-          className={clsx(classes.input, {[classes.notEmpty]: value?.length})}
+          className={clsx(classes.input, { [classes.notEmpty]: value?.length })}
           name={name}
           type={type}
           value={value}
@@ -91,11 +90,11 @@ const Input: FC<Props> = (props) => {
       </div>
       {touched && error && error.trim() && <span className={clsx(classes.error)}>{error}</span>}
     </div>
-  )
-}
+  );
+};
 
 Input.defaultProps = {
-  type: "text"
-}
+  type: "text",
+};
 
 export default Input;

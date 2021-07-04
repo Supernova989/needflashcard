@@ -5,14 +5,13 @@ import { createUseStyles } from "react-jss";
 type ButtonVariant = "contained" | "outlined";
 type ButtonColor = "primary" | "secondary" | "success" | "warning" | "danger";
 
-
 const useStyles = createUseStyles({
   button: {
     paddingTop: "0.2rem",
     paddingRight: "0.5rem",
     paddingBottom: "0.2rem",
     paddingLeft: "0.5rem",
-  }
+  },
 });
 
 interface Props {
@@ -29,7 +28,12 @@ const Button: FC<Props> = (props) => {
   const classes = useStyles();
 
   return (
-    <button type={type} {...rest} className={clsx(className, classes.button, "button", "button-" + color)} disabled={isDisabled}>
+    <button
+      type={type}
+      {...rest}
+      className={clsx(className, classes.button, "button", "button-" + color)}
+      disabled={isDisabled}
+    >
       {children}
     </button>
   );

@@ -7,6 +7,13 @@
   },
   "COMMON": {
     "EMAIL": "Email",
+    "FORGOT_PASSWORD": "Забыли пароль?",
     "PASSWORD": "Пароль"
+  },
+  "ERRORS": {
+    "REQUIRED": "Поле обязательно",
+    "INVALID_EMAIL": "Неправльный email",
+    "TOO_SHORT": "Слишком длинное значение",
+    "TOO_LONG": "Слишком короткое значение"
   }
 }

@@ -4,9 +4,7 @@ const NoUserLayout: FC = ({ children }) => {
   return (
     <>
       <header></header>
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
       <footer></footer>
     </>
   );

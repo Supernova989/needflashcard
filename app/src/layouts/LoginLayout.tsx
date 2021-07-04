@@ -15,10 +15,9 @@ const useStyles = createUseStyles({
     right: 0,
     bottom: 0,
     filter: "blur(3px)",
-    opacity: 0.9
-  }
+    opacity: 0.9,
+  },
 });
-
 
 const LoginLayout: FC = ({ children }) => {
   const classes = useStyles();
@@ -27,7 +26,7 @@ const LoginLayout: FC = ({ children }) => {
       <div className={classes.bg} />
       <header></header>
       <main>
-          <Suspense fallback={<PageLoadFallback />}>{children}</Suspense>
+        <Suspense fallback={<PageLoadFallback />}>{children}</Suspense>
       </main>
       <footer></footer>
     </>

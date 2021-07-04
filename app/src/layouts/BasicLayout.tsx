@@ -133,13 +133,6 @@ const BasicLayout: FC = ({ children }) => {
       </header>
       <main>
         <div className={"container mx-auto flex px-3"}>
-          {/*<aside className={"sidebar mr-3"}>*/}
-          {/*  <ul>*/}
-          {/*    <li><Link to={ROUTES.INDEX}>Home</Link></li>*/}
-          {/*    <li><Link to={ROUTES.GROUPS}>Your Collections</Link></li>*/}
-          {/*    <li><Link to={ROUTES.PROFILE}>Profile</Link></li>*/}
-          {/*  </ul>*/}
-          {/*</aside>*/}
           <div className={"content flex-1"}>
             <Suspense fallback={<PageLoadFallback />}>{children}</Suspense>
           </div>

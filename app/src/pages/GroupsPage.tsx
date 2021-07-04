@@ -64,13 +64,7 @@ const GroupsPage: FC = () => {
       <h1 className="mb-4">Your collections</h1>
 
       <div className={"mb-3"}>
-        <Formik
-          initialValues={{query: ""}}
-          validationSchema={searchSchema}
-          onSubmit={({query}, actions) => {
-          
-          }}
-        >
+        <Formik initialValues={{ query: "" }} validationSchema={searchSchema} onSubmit={({ query }, actions) => {}}>
           {({ values, touched, errors, ...props }) => (
             <form className="searchbar" autoComplete="off" autoCorrect="off" spellCheck={"false"}>
               <Input
@@ -83,18 +77,13 @@ const GroupsPage: FC = () => {
                 error={errors.query}
                 touched={touched.query}
               />
-    
-              <Button
-                type="submit"
-                variant={"contained"}
-                color={"primary"}
-              >
+
+              <Button type="submit" variant={"contained"} color={"primary"}>
                 Search
               </Button>
             </form>
           )}
         </Formik>
-        
       </div>
 
       <ul className={"flex flex-wrap justify-between"}>

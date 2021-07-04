@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import Button from "../components/Button";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../redux/store";
@@ -10,15 +10,17 @@ import clsx from "clsx";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
 import { ROUTES } from "../routes";
 import Input from "../components/Input";
+import { TFunction } from "react-i18next";
 
 interface Props {
   referer?: string;
 }
 
-export const loginSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
-  password: Yup.string().min(6, "Too Short!").max(20, "Too Long!").required("Required"),
-});
+export const loginSchema = (t: TFunction) =>
+  Yup.object().shape({
+    email: Yup.string().email(t("ERRORS.INVALID_EMAIL")).required(t("ERRORS.REQUIRED")),
+    password: Yup.string().min(6, t("ERRORS.TOO_SHORT")).max(20, t("ERRORS.REQUIRED")).required(t("ERRORS.REQUIRED")),
+  });
 
 const LoginPage: FC<RouteComponentProps & Props> = ({ referer, history }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -27,13 +29,11 @@ const LoginPage: FC<RouteComponentProps & Props> = ({ referer, history }) => {
   return (
     <div className="relative min-h-screen" data-testid="page-login">
       <aside className="login-sidebar">
-        <div>
-        
-        </div>
-        
+        <div></div>
+
         <Formik
           initialValues={{ email: "", password: "" }}
-          validationSchema={loginSchema}
+          validationSchema={loginSchema(t)}
           onSubmit={({ email, password }, actions) => {
             dispatch(authenticateUser(email, password)).then((success) => {
               if (!success) {
@@ -58,8 +58,7 @@ const LoginPage: FC<RouteComponentProps & Props> = ({ referer, history }) => {
                 touched={touched.email}
                 block={true}
               />
-        
-        
+
               <Input
                 testId="password-input"
                 name="password"
@@ -73,9 +72,14 @@ const LoginPage: FC<RouteComponentProps & Props> = ({ referer, history }) => {
                 touched={touched.password}
                 block={true}
               />
-        
-              <div className="flex sm:justify-between sm:flex-row flex-col-reverse items-center">
-                <Link className="link font-semibold sm:mt-0 mt-2 sm:w-auto text-center" to={ROUTES.FORGOT_PASSWORD}>Forgot password?</Link>
+
+              <hr />
+
+              <div className="flex sm:justify-between sm:flex-row flex-col-reverse items-center mt-3">
+                <Link className="link font-semibold sm:mt-0 mt-2 sm:w-auto text-center" to={ROUTES.FORGOT_PASSWORD}>
+                  {t("COMMON.FORGOT_PASSWORD")}
+                </Link>
+
                 <Button
                   className="w-full sm:w-auto"
                   data-testid="login-btn"
@@ -91,11 +95,8 @@ const LoginPage: FC<RouteComponentProps & Props> = ({ referer, history }) => {
             </form>
           )}
         </Formik>
-        
-        <div>
-        
-        </div>
-        
+
+        <div></div>
       </aside>
     </div>
   );

@@ -7,6 +7,13 @@
   },
   "COMMON": {
     "EMAIL": "Email",
+    "FORGOT_PASSWORD": "Forgot password?",
     "PASSWORD": "Password"
+  },
+  "ERRORS": {
+    "REQUIRED": "Field is required",
+    "INVALID_EMAIL": "Invalid email",
+    "TOO_SHORT": "Too short",
+    "TOO_LONG": "Too long"
   }
 }

@@ -8,11 +8,15 @@ import (
 	"nfc-api/config"
 	"nfc-api/controllers"
 	"nfc-api/database"
+	mw "nfc-api/middleware"
 	"nfc-api/services"
 )
 
 func main() {
 	database.Initialize()
+
+	r := mux.NewRouter()
+	r.Use(mw.CorsMiddleware)
 
 	userService := &services.UserService{
 		Col: database.GetDB().Collection(config.GetConfig().Mongo.Collections.Users),
@@ -24,9 +28,9 @@ func main() {
 		Ctx: database.GetGlobalContext(),
 	}
 
-	r := mux.NewRouter()
-
-	r.HandleFunc("/api/v1/register", controllers.RegisterUser(userService)).Methods("POST")
+	//Endpoints
+	r.HandleFunc("/api/register", controllers.RegisterUser(userService)).Methods("POST")
+	r.HandleFunc("/api/authenticate", controllers.AuthenticateUser(userService)).Methods("POST")
 
 	r.HandleFunc("/posts", controllers.FindPosts(postService)).Methods("GET")
 	r.HandleFunc("/posts/{id}", controllers.GetPost(postService)).Methods("GET")
@@ -34,6 +38,7 @@ func main() {
 	r.HandleFunc("/posts/{id}", controllers.PatchPost(postService)).Methods("PATCH")
 	r.HandleFunc("/posts/{id}", controllers.DeletePost(postService)).Methods("DELETE")
 
+	//On start
 	log.Println(fmt.Sprintf("App's running on port: 3010"))
 	if err := http.ListenAndServe(":3010", r); err != nil {
 		panic(err)

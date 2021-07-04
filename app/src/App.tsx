@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import LoginLayout from "./layouts/LoginLayout";
 import AboutPage from "./pages/AboutPage";
+import ForgotPage from "./pages/ForgotPage";
 
 const IndexPage = lazy(() => import("./pages/IndexPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
@@ -76,6 +77,15 @@ const App: FC = () => {
           component={() => (
             <NoUserLayout>
               <AboutPage />
+            </NoUserLayout>
+          )}
+        />
+        <Route
+          path={ROUTES.FORGOT_PASSWORD}
+          exact
+          component={() => (
+            <NoUserLayout>
+              <ForgotPage />
             </NoUserLayout>
           )}
         />
