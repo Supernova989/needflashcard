@@ -35,8 +35,8 @@ const LoginPage: FC<RouteComponentProps & Props> = ({ referer, history }) => {
           initialValues={{ email: "", password: "" }}
           validationSchema={loginSchema(t)}
           onSubmit={({ email, password }, actions) => {
-            dispatch(authenticateUser(email, password)).then((success) => {
-              if (!success) {
+            dispatch(authenticateUser(email, password)).then((errorCode) => {
+              if (errorCode) {
                 return;
               }
               history.push(ROUTES.INDEX);
