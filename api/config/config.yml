@@ -1,4 +1,0 @@
-environment: dev
-mongo:
-  server: mongodb://mongo:27017
-  database: Gmd_db

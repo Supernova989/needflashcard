@@ -38,7 +38,7 @@ services:
       - proxy-net
 
   mongo:
-    image: mongo:4.4.4
+    image: mongo:4.4.6
     security_opt:
       - no-new-privileges:true
     ports:

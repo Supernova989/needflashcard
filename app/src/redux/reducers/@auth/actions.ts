@@ -13,6 +13,7 @@ export const authenticateUser = (email: string, password: string): AppThunk<Prom
       .request<BackendLoginResponse>({
         url: "/authenticate",
         method: "POST",
+        withCredentials: false,
         data: { email, password },
       })
       .then((response) => {

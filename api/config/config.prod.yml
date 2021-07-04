@@ -1,0 +1,4 @@
+environment: production
+mongo:
+  server: mongodb://mongo:27017
+  database: Nfc_db_prod

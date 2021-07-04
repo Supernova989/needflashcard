@@ -15,9 +15,6 @@ import (
 func main() {
 	database.Initialize()
 
-	r := mux.NewRouter()
-	r.Use(mw.CorsMiddleware)
-
 	userService := &services.UserService{
 		Col: database.GetDB().Collection(config.GetConfig().Mongo.Collections.Users),
 		Ctx: database.GetGlobalContext(),
@@ -28,9 +25,14 @@ func main() {
 		Ctx: database.GetGlobalContext(),
 	}
 
+	r := mux.NewRouter()
+	//Common Middleware
+	r.Use(mw.CorsMiddleware)
+	r.Use(mw.XhrMiddleware)
+
 	//Endpoints
-	r.HandleFunc("/api/register", controllers.RegisterUser(userService)).Methods("POST")
-	r.HandleFunc("/api/authenticate", controllers.AuthenticateUser(userService)).Methods("POST")
+	r.HandleFunc("/api/register", controllers.RegisterUser(userService)).Methods("POST", "OPTIONS")
+	r.HandleFunc("/api/authenticate", controllers.AuthenticateUser(userService)).Methods("POST", "OPTIONS")
 
 	r.HandleFunc("/posts", controllers.FindPosts(postService)).Methods("GET")
 	r.HandleFunc("/posts/{id}", controllers.GetPost(postService)).Methods("GET")

@@ -2,11 +2,13 @@ package database
 
 import (
 	"context"
-	"nfc-api/config"
-	m "nfc-api/models"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
+	"nfc-api/config"
+	m "nfc-api/models"
+	"time"
 )
 
 var db *mongo.Database
@@ -23,7 +25,7 @@ func ConnectDB(ctx context.Context, cfg m.MongoConfiguration) *mongo.Database {
 	conn := options.Client().ApplyURI(cfg.Server)
 
 	log.Printf(
-		"Connenting to Mongo, using \"%s\" as a server, \"%s\" as a database...",
+		"Connenting to Mongo...\nServer: %s\nDatabase: %s",
 		cfg.Server,
 		cfg.Database,
 	)
@@ -32,6 +34,14 @@ func ConnectDB(ctx context.Context, cfg m.MongoConfiguration) *mongo.Database {
 	if err != nil {
 		log.Panic(err)
 	}
+	ctx, cancel := context.WithTimeout(context.Background(), 5 * time.Second)
+	defer cancel()
+	if err = client.Ping(ctx, readpref.Primary()); err != nil {
+		log.Panicf("Could not ping to mongo db service: %v", err)
+	} else {
+		log.Println("Successfully connected to MongoDB")
+	}
+
 	return client.Database(cfg.Database)
 }
 

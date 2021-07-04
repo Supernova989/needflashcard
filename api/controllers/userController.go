@@ -12,7 +12,7 @@ import (
 
 var AuthenticateUser = func(srv services.IUserService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("Requesting Authentication endpoint [%s]", "" )
+		log.Printf("Requesting Authentication endpoint [%s]", r.RequestURI)
 		user := m.User{}
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
@@ -21,6 +21,7 @@ var AuthenticateUser = func(srv services.IUserService) http.HandlerFunc {
 		}
 		err = json.Unmarshal(body, &user)
 
+		common.WriteJsonResponse(w, user, http.StatusOK, nil, "")
 	}
 }
 var RegisterUser = func(srv services.IUserService) http.HandlerFunc {

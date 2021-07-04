@@ -1,0 +1,4 @@
+environment: development
+mongo:
+  server: mongodb://127.0.0.1:27017
+  database: Nfc_db_dev

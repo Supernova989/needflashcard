@@ -14,8 +14,6 @@ import (
 	"testing"
 )
 
-type HashMap map[string]interface{}
-
 var service services.IPostService
 
 const testServer = "mongodb://localhost:27017"
@@ -68,10 +66,10 @@ func TestCreatePost(t *testing.T) {
 			assert.NotNil(t, resp.Payload)
 
 			if test.expectedCode == http.StatusCreated && resp.Payload != nil {
-				assert.Equal(t, test.expectedBody, resp.Payload.(HashMap)["body"])
-				assert.Equal(t, test.expectedTitle, resp.Payload.(HashMap)["title"])
-				assert.NotNil(t, resp.Payload.(HashMap)["id"])
-				_, _ = service.Delete(resp.Payload.(HashMap)["id"].(string))
+				assert.Equal(t, test.expectedBody, resp.Payload.(map[string]interface{})["body"])
+				assert.Equal(t, test.expectedTitle, resp.Payload.(map[string]interface{})["title"])
+				assert.NotNil(t, resp.Payload.(map[string]interface{})["id"])
+				_, _ = service.Delete(resp.Payload.(map[string]interface{})["id"].(string))
 			}
 			assert.Equal(t, test.expectedCode, recorder.Code)
 		})
