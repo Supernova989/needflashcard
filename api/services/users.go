@@ -18,6 +18,7 @@ type IUserService interface {
 	Get(string) (*m.User, error)
 	Insert(m.User) (*m.User, error)
 	Find(interface{}) ([]m.User, error)
+	Delete(string) (m.ResponseDelete, error)
 	CheckIfExists(email string, username string) (bool, error)
 	Authenticate(email string, password string) (error, int, string, *m.User)
 }
@@ -114,4 +115,20 @@ func (c *UserService) Insert(doc m.User) (*m.User, error) {
 	}
 	created.Password = ""
 	return created, nil
+}
+
+func (c *UserService) Delete(id string) (m.ResponseDelete, error) {
+	result := m.ResponseDelete{
+		DeletedCount: 0,
+	}
+	_id, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return result, err
+	}
+	res, err := c.Col.DeleteOne(c.Ctx, bson.M{"_id": _id})
+	if err != nil {
+		return result, err
+	}
+	result.DeletedCount = res.DeletedCount
+	return result, nil
 }

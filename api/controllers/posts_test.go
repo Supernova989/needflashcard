@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
+	"nfc-api/common"
 	"nfc-api/database"
 	m "nfc-api/models"
 	"nfc-api/services"
@@ -14,11 +15,11 @@ import (
 	"testing"
 )
 
-var service services.IPostService
+var postService services.IPostService
 
-const testServer = "mongodb://localhost:27017"
-const testDB = "Gmd_db"
-const testCollection = "Posts_test"
+var testServer = "mongodb://localhost:27017"
+const testDB = "Nfc_db_test"
+const testCollection = "Posts"
 
 func init() {
 	conf := m.MongoConfiguration{
@@ -30,7 +31,7 @@ func init() {
 	db := database.ConnectDB(ctx, conf)
 	collection := db.Collection(testCollection)
 
-	service = &services.PostService{
+	postService = &services.PostService{
 		Col: collection,
 		Ctx: ctx,
 	}
@@ -58,10 +59,10 @@ func TestCreatePost(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			req, _ := http.NewRequest("POST", "/posts", strings.NewReader(test.payload))
 			recorder := httptest.NewRecorder()
-			h := http.HandlerFunc(CreatePost(service))
+			h := http.HandlerFunc(CreatePost(postService))
 			h.ServeHTTP(recorder, req)
 
-			resp := m.JsonResponse{}
+			resp := common.JsonResponse{}
 			_ = json.Unmarshal([]byte(recorder.Body.String()), &resp)
 			assert.NotNil(t, resp.Payload)
 
@@ -69,7 +70,7 @@ func TestCreatePost(t *testing.T) {
 				assert.Equal(t, test.expectedBody, resp.Payload.(map[string]interface{})["body"])
 				assert.Equal(t, test.expectedTitle, resp.Payload.(map[string]interface{})["title"])
 				assert.NotNil(t, resp.Payload.(map[string]interface{})["id"])
-				_, _ = service.Delete(resp.Payload.(map[string]interface{})["id"].(string))
+				_, _ = postService.Delete(resp.Payload.(map[string]interface{})["id"].(string))
 			}
 			assert.Equal(t, test.expectedCode, recorder.Code)
 		})

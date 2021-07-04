@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-type jsonResponse struct {
+type JsonResponse struct {
 	Payload      interface{} `json:"payload"`
 	ErrorCode    *int        `json:"error_code,omitempty"`
 }
@@ -17,7 +17,7 @@ type jsonResponse struct {
 func WriteJsonResponse(w http.ResponseWriter, payload interface{}, status int, errorCode *int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
-	resp := &jsonResponse{}
+	resp := &JsonResponse{}
 	resp.ErrorCode = errorCode
 	resp.Payload = payload
 	json.NewEncoder(w).Encode(resp)
