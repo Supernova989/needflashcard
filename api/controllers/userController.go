@@ -12,27 +12,59 @@ import (
 
 var AuthenticateUser = func(srv services.IUserService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("Requesting Authentication endpoint [%s]", r.RequestURI)
+		log.Printf("Requesting authentication endpoint [%s]", r.RequestURI)
 		user := m.User{}
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			common.WriteJsonResponse(w, nil, http.StatusBadRequest, nil, "")
+			common.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
 			return
 		}
 		err = json.Unmarshal(body, &user)
 
-		common.WriteJsonResponse(w, user, http.StatusOK, nil, "")
+		common.WriteJsonResponse(w, user, http.StatusOK, nil)
 	}
 }
+
 var RegisterUser = func(srv services.IUserService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("Requesting registration endpoint [%s]", r.RequestURI)
 		user := m.User{}
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			common.WriteJsonResponse(w, nil, http.StatusBadRequest, nil, "")
+			log.Println(err.Error())
+			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &common.ErrorInvalidRequest)
 			return
 		}
 		err = json.Unmarshal(body, &user)
+		if err != nil {
+			log.Println(err.Error())
+			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &common.ErrorInvalidRequest)
+			return
+		}
+		// reset fields
+		user.Confirmed = false
+		user.ID = nil
 
+		err, code := user.Validate()
+		if err != nil {
+			log.Println(err.Error())
+			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &code)
+			return
+		}
+		//check if email is already used
+		exists, err := srv.CheckIfExists(user.Email, user.Username)
+		if exists || err != nil {
+			log.Printf("username [%s] or email [%s] are already in use", user.Username, user.Email)
+			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &common.ErrorUserExists)
+			return
+		}
+
+		result, err := srv.Insert(user)
+		if err != nil {
+			log.Println(err.Error())
+			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &code)
+			return
+		}
+		common.WriteJsonResponse(w, result, http.StatusCreated, nil)
 	}
 }

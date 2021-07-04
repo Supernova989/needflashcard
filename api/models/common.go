@@ -13,11 +13,6 @@ type ResponseDelete struct {
 	DeletedCount int64 `json:"deletedCount"`
 }
 
-type JsonResponse struct {
-	Payload      interface{} `json:"payload"`
-	ErrorCode    *int        `json:"error_code,omitempty"`
-	ErrorMessage string      `json:"error_message,omitempty"`
-}
 
 type AppConfiguration struct {
 	Environment string

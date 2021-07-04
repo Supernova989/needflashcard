@@ -3,4 +3,4 @@ COPY . /app
 WORKDIR /app
 EXPOSE 3010
 RUN CGO_ENABLED=0 GOOS=linux go build -o main
-CMD ["./main"]
+CMD ["./main", "--production"]
