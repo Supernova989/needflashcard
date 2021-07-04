@@ -1,7 +1,10 @@
 package models
 
-type RegisterRequest struct {
-	Username string
+import "github.com/dgrijalva/jwt-go"
+
+type AuthenticationRequest struct {
+	Email string `json:"email"`
+	Password string `json:"password"`
 }
 
 type ResponseUpdate struct {
@@ -28,4 +31,9 @@ type MongoConfiguration struct {
 type MongoCollections struct {
 	Users string
 	Posts string
+}
+
+type JWTToken struct {
+	jwt.StandardClaims
+	Name string `json:"name"`
 }

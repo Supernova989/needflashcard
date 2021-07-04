@@ -2,11 +2,16 @@ package services
 
 import (
 	"context"
+	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
+	"nfc-api/common"
 	m "nfc-api/models"
+	"os"
+	"time"
 )
 
 type IUserService interface {
@@ -14,6 +19,7 @@ type IUserService interface {
 	Insert(m.User) (*m.User, error)
 	Find(interface{}) ([]m.User, error)
 	CheckIfExists(email string, username string) (bool, error)
+	Authenticate(email string, password string) (error, int, string, *m.User)
 }
 
 type UserService struct {
@@ -21,6 +27,29 @@ type UserService struct {
 	Col *mongo.Collection
 }
 
+func (c *UserService) Authenticate(email string, password string) (error, int, string, *m.User) {
+	user := m.User{}
+	err := c.Col.FindOne(c.Ctx, bson.M{"email": email}).Decode(&user)
+	if err != nil {
+		return fmt.Errorf("user not found"), common.ErrorInvalidCredentials, "", nil
+	}
+	if err != nil && (err == bcrypt.ErrMismatchedHashAndPassword || err == bcrypt.ErrHashTooShort) {
+		return fmt.Errorf("Invalid credentials"), common.ErrorInvalidCredentials, "", nil
+	}
+	if user.Blocked {
+		return fmt.Errorf("User is blocked"), common.ErrorAccountBlocked, "", nil
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password))
+	expirationHours := 120
+	tk := &m.JWTToken{}
+	tk.IssuedAt = time.Now().Unix()
+	tk.ExpiresAt = time.Now().Add(time.Hour * time.Duration(expirationHours)).Unix()
+	tk.Name = user.Username
+	jwtWithClaims := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
+	signedToken, _ := jwtWithClaims.SignedString([]byte(os.Getenv("SECRET")))
+	return nil, 0, signedToken, &user
+}
 func (c *UserService) Get(id string) (*m.User, error) {
 	user := m.User{}
 	_id, err := primitive.ObjectIDFromHex(id)

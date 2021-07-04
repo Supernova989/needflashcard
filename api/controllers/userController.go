@@ -13,15 +13,28 @@ import (
 var AuthenticateUser = func(srv services.IUserService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Requesting authentication endpoint [%s]", r.RequestURI)
-		user := m.User{}
+		cred := m.AuthenticationRequest{}
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			common.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
 			return
 		}
-		err = json.Unmarshal(body, &user)
-
-		common.WriteJsonResponse(w, user, http.StatusOK, nil)
+		err = json.Unmarshal(body, &cred)
+		if err != nil {
+			log.Println(err.Error())
+			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &common.ErrorInvalidRequest)
+			return
+		}
+		err, code, token, user := srv.Authenticate(cred.Email, cred.Password)
+		if err != nil {
+			log.Println(err.Error())
+			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &code)
+			return
+		}
+		log.Printf("User %s [%s] logs in", user.Username, user.ID)
+		result := make(map[string]interface{}, 0)
+		result["token"] = token
+		common.WriteJsonResponse(w, result, http.StatusOK, nil)
 	}
 }
 

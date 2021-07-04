@@ -10,6 +10,7 @@ type User struct {
 	ID        interface{} `json:"id,omitempty" bson:"_id,omitempty"`
 	Email     string      `json:"email" bson:"email"`
 	Confirmed bool        `json:"confirmed" bson:"confirmed"`
+	Blocked   bool        `json:"blocked" bson:"blocked"`
 	Username  string      `json:"username" bson:"username"`
 	Password  string      `json:"password,omitempty" bson:"password"`
 }
