@@ -44,7 +44,6 @@ func TestCreateUser(t *testing.T) {
 		expectedCode      int
 		expectedUsername  string
 		expectedEmail     string
-		expectedPassword  *string
 		expectedConfirmed bool
 	}{
 		"should return 201 and a proper payload": {
@@ -52,7 +51,6 @@ func TestCreateUser(t *testing.T) {
 			expectedCode:      http.StatusCreated,
 			expectedUsername:  username,
 			expectedEmail:     email,
-			expectedPassword:  nil,
 			expectedConfirmed: false,
 		},
 	}
@@ -72,7 +70,7 @@ func TestCreateUser(t *testing.T) {
 				assert.Equal(t, test.expectedUsername, resp.Payload.(map[string]interface{})["username"])
 				assert.Equal(t, test.expectedEmail, resp.Payload.(map[string]interface{})["email"])
 				assert.Equal(t, test.expectedConfirmed, resp.Payload.(map[string]interface{})["confirmed"])
-				assert.Equal(t, test.expectedPassword, resp.Payload.(map[string]interface{})["password"])
+				assert.Equal(t, nil, resp.Payload.(map[string]interface{})["password"])
 				assert.NotEqual(t, id, resp.Payload.(map[string]interface{})["id"])
 				_, _ = userService.Delete(resp.Payload.(map[string]interface{})["id"].(string))
 			}
