@@ -1,10 +1,9 @@
+import { ROUTES } from "../routes";
+
 /**
  * Generates a random string with a given length
  * @param len Desirable output length. Minimal output length is 2.
- * @returns {string}
  */
-import { ROUTES } from "../routes";
-
 export function generateToken(len: number): string {
   var s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   return Array(Math.abs(len) || 2)

@@ -3,7 +3,7 @@ package models
 import "github.com/dgrijalva/jwt-go"
 
 type AuthenticationRequest struct {
-	Email string `json:"email"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }
 
@@ -15,7 +15,6 @@ type ResponseUpdate struct {
 type ResponseDelete struct {
 	DeletedCount int64 `json:"deletedCount"`
 }
-
 
 type AppConfiguration struct {
 	Environment string
@@ -35,5 +34,6 @@ type MongoCollections struct {
 
 type JWTToken struct {
 	jwt.StandardClaims
-	Name string `json:"name"`
+	Name   string `json:"name"`
+	UserId string `json:"userId"`
 }
