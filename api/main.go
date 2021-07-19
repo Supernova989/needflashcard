@@ -20,8 +20,8 @@ func main() {
 		Ctx: database.GetGlobalContext(),
 	}
 
-	postService := &services.PostService{
-		Col: database.GetDB().Collection(config.GetConfig().Mongo.Collections.Posts),
+	groupService := &services.GroupService{
+		Col: database.GetDB().Collection(config.GetConfig().Mongo.Collections.Groups),
 		Ctx: database.GetGlobalContext(),
 	}
 
@@ -34,11 +34,11 @@ func main() {
 	r.HandleFunc("/api/register", controllers.RegisterUser(userService)).Methods("POST", "OPTIONS")
 	r.HandleFunc("/api/authenticate", controllers.AuthenticateUser(userService)).Methods("POST", "OPTIONS")
 
-	r.HandleFunc("/posts", controllers.FindPosts(postService)).Methods("GET")
-	r.HandleFunc("/posts/{id}", controllers.GetPost(postService)).Methods("GET")
-	r.HandleFunc("/posts", controllers.CreatePost(postService)).Methods("POST")
-	r.HandleFunc("/posts/{id}", controllers.PatchPost(postService)).Methods("PATCH")
-	r.HandleFunc("/posts/{id}", controllers.DeletePost(postService)).Methods("DELETE")
+	r.Handle("/api/v1/groups", mw.JwtAuthMiddleware(controllers.FindGroups(groupService), userService)).Methods("GET", "OPTIONS")
+	r.Handle("/api/v1/groups/{id}", mw.JwtAuthMiddleware(controllers.GetGroup(groupService), userService)).Methods("GET", "OPTIONS")
+	r.Handle("/api/v1/groups", mw.JwtAuthMiddleware(controllers.CreateGroup(groupService), userService)).Methods("POST", "OPTIONS")
+	r.Handle("/api/v1/groups/{id}", mw.JwtAuthMiddleware(controllers.PatchPost(groupService), userService)).Methods("PATCH", "OPTIONS")
+	r.Handle("/api/v1/groups/{id}", mw.JwtAuthMiddleware(controllers.DeletePost(groupService), userService)).Methods("DELETE", "OPTIONS")
 
 	//On start
 	log.Println(fmt.Sprintf("App's running on port: 3010"))

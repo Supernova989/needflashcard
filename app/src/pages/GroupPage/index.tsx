@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
+import Page from "../../components/Page";
 
 interface Props {
   id: string;
@@ -10,7 +11,7 @@ const GroupPage: FC<RouteComponentProps<Props>> = ({ match }) => {
     params: { id },
   } = match!;
 
-  return <div data-testid="group-page">I am GroupPage ({id})</div>;
+  return <Page dataTestId={"group-page"}>I am GroupPage ({id})</Page>;
 };
 
 export default withRouter(GroupPage);

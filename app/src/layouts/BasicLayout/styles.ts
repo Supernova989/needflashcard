@@ -4,10 +4,15 @@ export const MOBILE_MENU_WIDTH = 230;
 export const MOBILE_MENU_ANIMATION_DURATION = 250;
 
 export const useStyles = createUseStyles({
+  header: {
+    backgroundColor: "#000000",
+    color: "#FFFFFF",
+  },
   menuButton: {
     width: 20,
     height: 22.8,
-    color: "#4B4B4B",
+    color: "inherit",
+    cursor: "pointer",
     transition: `ease 200ms`,
     "&:hover": {
       color: "#878787",
@@ -27,9 +32,10 @@ export const useStyles = createUseStyles({
     transition: `ease ${MOBILE_MENU_ANIMATION_DURATION}ms`,
     position: "fixed",
     width: MOBILE_MENU_WIDTH,
-    background: "#CECECE",
+    background: "#f6f6ff",
     padding: 10,
     opacity: 0,
+    height: "100vh",
     transform: `translateX(-${MOBILE_MENU_WIDTH}px)`,
   },
   menuOpen: {

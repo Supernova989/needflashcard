@@ -29,7 +29,7 @@ export interface Response<T> {
   error_code: number;
 }
 
-interface ResponsePagination<T> {
+export interface ResponsePagination<T> {
   payload?: {
     size: number;
     page: number;

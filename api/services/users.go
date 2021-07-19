@@ -46,8 +46,7 @@ func (c *UserService) Authenticate(email string, password string) (error, int, s
 	tk := &m.JWTToken{}
 	tk.IssuedAt = time.Now().Unix()
 	tk.ExpiresAt = time.Now().Add(time.Hour * time.Duration(expirationHours)).Unix()
-	tk.Name = user.Username
-	tk.UserId = user.ID.(primitive.ObjectID).Hex()
+	tk.Issuer = user.ID.(primitive.ObjectID).Hex()
 	jwtWithClaims := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tk)
 	signedToken, _ := jwtWithClaims.SignedString([]byte(os.Getenv("SECRET")))
 	return nil, 0, signedToken, &user

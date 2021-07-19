@@ -25,8 +25,9 @@ var GetConfig = func() m.AppConfiguration {
 		log.Panic(err)
 	}
 	collections := m.MongoCollections{
-		Users: "Users",
-		Posts: "Posts",
+		Users:  "Users",
+		Groups: "Groups",
+		Words: "Words",
 	}
 	conf.Mongo.Collections = collections
 	return conf

@@ -1,4 +1,4 @@
-import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import { configureStore, ThunkAction, Action, Store, applyMiddleware } from "@reduxjs/toolkit";
 import { reducer as authReducer } from "./reducers/@auth";
 import logger from "redux-logger";
 

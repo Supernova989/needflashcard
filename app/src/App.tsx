@@ -9,11 +9,11 @@ import LoginLayout from "./layouts/LoginLayout";
 import AboutPage from "./pages/AboutPage";
 import Index from "./pages/ForgotPage";
 
-const IndexPage = lazy(() => import("./pages/IndexPage"));
+const IndexPage = lazy(() => import("./pages/IndexPage/IndexPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const GroupPage = lazy(() => import("./pages/GroupPage"));
 const GroupsPage = lazy(() => import("./pages/GroupsPage"));
-const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage/ProfilePage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App: FC = () => {

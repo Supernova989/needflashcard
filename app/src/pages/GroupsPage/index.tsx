@@ -11,6 +11,10 @@ import { GroupItem } from "../../components/GroupItem";
 import { Group } from "../../shared/models";
 import clsx from "clsx";
 import { useClickAwayListener } from "../../hooks/useClickAwayListener";
+import Page from "../../components/Page";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { getGroups } from "../../redux/reducers/@groups/actions";
 
 const groups: Group[] = [
   {
@@ -56,10 +60,12 @@ const GroupsPage: FC = () => {
   const classes = useStyles();
   const history = useHistory();
   const { t } = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
   const searchInputTimeoutRef = useRef<undefined | NodeJS.Timeout>();
   const searchRef = useClickAwayListener(() => setSearchSuggestions([]));
   useEffect(() => {
+    dispatch(getGroups({ userId: "60f1b063c038e4ce3b642faa", num: 10 }));
     return () => {
       if (searchInputTimeoutRef.current) {
         clearTimeout(searchInputTimeoutRef.current);
@@ -82,9 +88,7 @@ const GroupsPage: FC = () => {
     }, 1000);
   };
   return (
-    <>
-      <h1 className="mb-4">Your collections</h1>
-
+    <Page heading={"Your collections"}>
       <div className={"mb-3"}>
         <Formik
           initialValues={{ query: "" }}
@@ -135,7 +139,7 @@ const GroupsPage: FC = () => {
           );
         })}
       </ul>
-    </>
+    </Page>
   );
 };
 

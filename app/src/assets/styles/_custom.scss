@@ -12,8 +12,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $fontColor;
+  background-color: #eef0f8;
 }
-
+a {
+  text-decoration: none;
+  color: inherit;
+}
 .login-sidebar {
   transition-property: width, background-color, border-color, color, fill, stroke, opacity, box-shadow, transform,
     filter, backdrop-filter, -webkit-backdrop-filter;

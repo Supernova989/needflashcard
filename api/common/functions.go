@@ -14,6 +14,12 @@ type JsonResponse struct {
 	ErrorCode    *int        `json:"error_code,omitempty"`
 }
 
+type ContextPayload struct {
+	M map[string]string
+}
+func (c *ContextPayload) Get(key string) string {
+	return c.M[key]
+}
 func WriteJsonResponse(w http.ResponseWriter, payload interface{}, status int, errorCode *int) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)

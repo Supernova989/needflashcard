@@ -35,3 +35,7 @@ export function shuffle(arr: Array<any> = []) {
 export const delay = (ms: number = 100): Promise<void> => {
   return new Promise<void>((resolve) => setTimeout(() => resolve(), ms));
 };
+
+export function getBearer(token?: string) {
+  return `Bearer ${token}`;
+}

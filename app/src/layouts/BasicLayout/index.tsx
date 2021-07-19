@@ -48,8 +48,12 @@ const BasicLayout: FC<Props> = ({ children, disableMenu }) => {
 
   const headerMenu = (
     <nav role="navigation">
-      <Link to={ROUTES.GROUPS}>Your Collections</Link>
-      <Link to={ROUTES.PROFILE}>Profile</Link>
+      <Link to={ROUTES.GROUPS} className={clsx("ml-3")}>
+        Your Collections
+      </Link>
+      <Link to={ROUTES.PROFILE} className={clsx("ml-3")}>
+        Profile
+      </Link>
     </nav>
   );
 
@@ -87,7 +91,7 @@ const BasicLayout: FC<Props> = ({ children, disableMenu }) => {
     <>
       {!disableMenu && mobileLayout && mobileMenu}
 
-      <header className="bg-gray-200 pb-2 pt-2 mb-3">
+      <header className={clsx("pb-2 pt-2 mb-3", classes.header)}>
         <div className="container flex items-center justify-between mx-auto px-3">
           {!disableMenu && mobileLayout && menuButton}
 

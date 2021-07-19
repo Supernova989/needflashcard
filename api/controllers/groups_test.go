@@ -15,11 +15,11 @@ import (
 	"testing"
 )
 
-var postService services.IPostService
+var postService services.IGroupService
 
 var testServer = "mongodb://localhost:27017"
 const testDB = "Nfc_db_test"
-const testCollection = "Posts"
+const testCollection = "Groups"
 
 func init() {
 	conf := m.MongoConfiguration{
@@ -31,7 +31,7 @@ func init() {
 	db := database.ConnectDB(ctx, conf)
 	collection := db.Collection(testCollection)
 
-	postService = &services.PostService{
+	postService = &services.GroupService{
 		Col: collection,
 		Ctx: ctx,
 	}
@@ -59,7 +59,7 @@ func TestCreatePost(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			req, _ := http.NewRequest("POST", "/posts", strings.NewReader(test.payload))
 			recorder := httptest.NewRecorder()
-			h := http.HandlerFunc(CreatePost(postService))
+			h := http.HandlerFunc(CreateGroup(postService))
 			h.ServeHTTP(recorder, req)
 
 			resp := common.JsonResponse{}

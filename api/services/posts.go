@@ -9,21 +9,21 @@ import (
 	m "nfc-api/models"
 )
 
-type IPostService interface {
-	Get(string) (*m.Post, error)
-	Find(interface{}) ([]m.Post, error)
-	Insert(m.Post) (*m.Post, error)
+type IGroupService interface {
+	Get(string) (*m.Group, error)
+	Find(interface{}) ([]m.Group, error)
+	Insert(m.Group) (*m.Group, error)
 	Update(string, interface{}) (m.ResponseUpdate, error)
 	Delete(string) (m.ResponseDelete, error)
 }
 
-type PostService struct {
+type GroupService struct {
 	Ctx context.Context
 	Col *mongo.Collection
 }
 
-func (c *PostService) Get(id string) (*m.Post, error) {
-	post := m.Post{}
+func (c *GroupService) Get(id string) (*m.Group, error) {
+	post := m.Group{}
 	_id, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
@@ -35,8 +35,8 @@ func (c *PostService) Get(id string) (*m.Post, error) {
 	return &post, nil
 }
 
-func (c *PostService) Find(filter interface{}) ([]m.Post, error) {
-	posts := make([]m.Post, 0)
+func (c *GroupService) Find(filter interface{}) ([]m.Group, error) {
+	posts := make([]m.Group, 0)
 	if filter == nil {
 		filter = bson.M{}
 	}
@@ -45,14 +45,19 @@ func (c *PostService) Find(filter interface{}) ([]m.Post, error) {
 		return nil, err
 	}
 	for cursor.Next(c.Ctx) {
-		doc := m.Post{}
+		doc := m.Group{}
 		cursor.Decode(&doc)
 		posts = append(posts, doc)
 	}
 	return posts, nil
 }
 
-func (c *PostService) Insert(doc m.Post) (*m.Post, error) {
+func (c *GroupService) Insert(doc m.Group) (*m.Group, error) {
+	userId, err := primitive.ObjectIDFromHex(doc.UserID.(string))
+	if err != nil {
+		return nil, err
+	}
+	doc.UserID = userId
 	res, err := c.Col.InsertOne(c.Ctx, doc)
 	if err != nil {
 		return nil, err
@@ -61,7 +66,7 @@ func (c *PostService) Insert(doc m.Post) (*m.Post, error) {
 	return c.Get(id)
 }
 
-func (c *PostService) Update(id string, update interface{}) (m.ResponseUpdate, error) {
+func (c *GroupService) Update(id string, update interface{}) (m.ResponseUpdate, error) {
 	result := m.ResponseUpdate{
 		ModifiedCount: 0,
 	}
@@ -69,12 +74,12 @@ func (c *PostService) Update(id string, update interface{}) (m.ResponseUpdate, e
 	if err != nil {
 		return result, err
 	}
-	post, err := c.Get(id)
+	group, err := c.Get(id)
 	if err != nil {
 		return result, err
 	}
 	var ex map[string]interface{}
-	b, err := json.Marshal(post)
+	b, err := json.Marshal(group)
 	if err != nil {
 		return result, err
 	}
@@ -92,16 +97,16 @@ func (c *PostService) Update(id string, update interface{}) (m.ResponseUpdate, e
 	if err != nil {
 		return result, err
 	}
-	newPost, err := c.Get(id)
+	newGroup, err := c.Get(id)
 	if err != nil {
 		return result, err
 	}
 	result.ModifiedCount = res.ModifiedCount
-	result.Result = newPost
+	result.Result = newGroup
 	return result, nil
 }
 
-func (c *PostService) Delete(id string) (m.ResponseDelete, error) {
+func (c *GroupService) Delete(id string) (m.ResponseDelete, error) {
 	result := m.ResponseDelete{
 		DeletedCount: 0,
 	}

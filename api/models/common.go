@@ -28,12 +28,11 @@ type MongoConfiguration struct {
 }
 
 type MongoCollections struct {
-	Users string
-	Posts string
+	Users  string
+	Groups string
+	Words string
 }
 
 type JWTToken struct {
 	jwt.StandardClaims
-	Name   string `json:"name"`
-	UserId string `json:"userId"`
 }

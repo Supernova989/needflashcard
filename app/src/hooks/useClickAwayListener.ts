@@ -20,7 +20,6 @@ export function useClickAwayListener(callback: () => void) {
         callbackRef.current(e);
       }
     }
-  }, []); // no need for callback + innerRef dep
-
-  return innerRef; // return ref; client can omit `useRef`
+  }, []);
+  return innerRef;
 }
