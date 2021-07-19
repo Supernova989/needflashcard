@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import { Suspense } from "react";
-import PageLoadFallback from "../components/PageLoadFallback";
+import PageLoadFallback from "../../components/PageLoadFallback";
 import { createUseStyles } from "react-jss";
-import bgImage from "../assets/img/bg1.jpg";
+import bgImage from "../../assets/img/bg1.jpg";
 
 const useStyles = createUseStyles({
   bg: {
@@ -10,10 +10,10 @@ const useStyles = createUseStyles({
     backgroundSize: "contain",
     position: "fixed",
     zIndex: -1,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    top: -5,
+    left: -5,
+    right: -5,
+    bottom: -5,
     filter: "blur(3px)",
     opacity: 0.9,
   },

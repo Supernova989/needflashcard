@@ -1,60 +1,26 @@
 import React, { FC, useEffect, useState } from "react";
 import { Suspense } from "react";
 import { Link } from "react-router-dom";
-import Button from "../components/Button";
-import PageLoadFallback from "../components/PageLoadFallback";
-import { ROUTES } from "../routes";
-import { useWindowSize } from "../hooks/useWindowSize";
-import { createUseStyles } from "react-jss";
+import Button from "../../components/Button";
+import PageLoadFallback from "../../components/PageLoadFallback";
+import { ROUTES } from "../../routes";
+import { useWindowSize } from "../../hooks/useWindowSize";
 import clsx from "clsx";
+import { useStyles } from "./styles";
+import { BREAKPOINTS } from "../../shared/constants";
 
-const MOBILE_BREAKPOINT = 768;
-const MOBILE_MENU_WIDTH = 230;
-const MOBILE_MENU_ANIMATION_DURATION = 250;
+interface Props {
+  disableMenu?: boolean;
+}
 
-const useStyles = createUseStyles({
-  menuButton: {
-    width: 20,
-    height: 22.8,
-    color: "#4B4B4B",
-    transition: `ease 200ms`,
-    "&:hover": {
-      color: "#878787",
-    },
-  },
-  clickAwayListener: {
-    zIndex: 9,
-    position: "fixed",
-    left: 0,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    cursor: "pointer",
-  },
-  mobileMenu: {
-    zIndex: 10,
-    transition: `ease ${MOBILE_MENU_ANIMATION_DURATION}ms`,
-    position: "fixed",
-    width: MOBILE_MENU_WIDTH,
-    background: "#CECECE",
-    padding: 10,
-    opacity: 0,
-    transform: `translateX(-${MOBILE_MENU_WIDTH}px)`,
-  },
-  menuOpen: {
-    opacity: 1,
-    transform: `translateX(0)`,
-  },
-});
-
-const BasicLayout: FC = ({ children }) => {
+const BasicLayout: FC<Props> = ({ children, disableMenu }) => {
   const classes = useStyles();
   const [mobileLayout, setMobileLayout] = useState<boolean>(false);
   const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
   const [clientW, clientH] = useWindowSize();
 
   useEffect(() => {
-    const isMobile = clientW <= MOBILE_BREAKPOINT;
+    const isMobile = clientW <= BREAKPOINTS.M;
     setMobileLayout(isMobile);
     if (!isMobile) {
       setShowMobileMenu(false);
@@ -119,25 +85,24 @@ const BasicLayout: FC = ({ children }) => {
   );
   return (
     <>
-      {mobileLayout && mobileMenu}
+      {!disableMenu && mobileLayout && mobileMenu}
 
       <header className="bg-gray-200 pb-2 pt-2 mb-3">
         <div className="container flex items-center justify-between mx-auto px-3">
-          {mobileLayout && menuButton}
+          {!disableMenu && mobileLayout && menuButton}
 
           <Link to={ROUTES.INDEX}>NeedFlashcard</Link>
           {/*<Button variant={"contained"} color={"primary"} className={"ml-1"}>Get started</Button>*/}
 
-          {!mobileLayout && headerMenu}
+          {!disableMenu && !mobileLayout && headerMenu}
         </div>
       </header>
       <main>
-        <div className={"container mx-auto flex px-3"}>
-          <div className={"content flex-1"}>
-            <Suspense fallback={<PageLoadFallback />}>{children}</Suspense>
-          </div>
+        <div className={"container mx-auto px-3"}>
+          <Suspense fallback={<PageLoadFallback />}>{children}</Suspense>
         </div>
       </main>
+
       <footer></footer>
     </>
   );

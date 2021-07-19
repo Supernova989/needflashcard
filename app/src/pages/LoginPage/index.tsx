@@ -1,15 +1,15 @@
 import React, { FC, useEffect } from "react";
-import Button from "../components/Button";
+import Button from "../../components/Button";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../redux/store";
-import { authenticateUser } from "../redux/reducers/@auth/actions";
+import { AppDispatch } from "../../redux/store";
+import { authenticateUser } from "../../redux/reducers/@auth/actions";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import { Link, RouteComponentProps, withRouter } from "react-router-dom";
-import { ROUTES } from "../routes";
-import Input from "../components/Input";
+import { ROUTES } from "../../routes";
+import Input from "../../components/Input";
 import { TFunction } from "react-i18next";
 
 interface Props {
@@ -19,7 +19,7 @@ interface Props {
 export const loginSchema = (t: TFunction) =>
   Yup.object().shape({
     email: Yup.string().email(t("ERRORS.INVALID_EMAIL")).required(t("ERRORS.REQUIRED")),
-    password: Yup.string().min(6, t("ERRORS.TOO_SHORT")).max(20, t("ERRORS.REQUIRED")).required(t("ERRORS.REQUIRED")),
+    password: Yup.string().min(6, t("ERRORS.TOO_SHORT")).max(20, t("ERRORS.TOO_LONG")).required(t("ERRORS.REQUIRED")),
   });
 
 const LoginPage: FC<RouteComponentProps & Props> = ({ referer, history }) => {
@@ -29,7 +29,7 @@ const LoginPage: FC<RouteComponentProps & Props> = ({ referer, history }) => {
   return (
     <div className="relative min-h-screen" data-testid="page-login">
       <aside className="login-sidebar">
-        <div></div>
+        <div />
 
         <Formik
           initialValues={{ email: "", password: "" }}
@@ -96,7 +96,7 @@ const LoginPage: FC<RouteComponentProps & Props> = ({ referer, history }) => {
           )}
         </Formik>
 
-        <div></div>
+        <div />
       </aside>
     </div>
   );

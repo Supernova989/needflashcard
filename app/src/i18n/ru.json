@@ -6,6 +6,7 @@
     "OK": "OK"
   },
   "COMMON": {
+    "SEARCH": "Поиск",
     "EMAIL": "Email",
     "FORGOT_PASSWORD": "Забыли пароль?",
     "PASSWORD": "Пароль"

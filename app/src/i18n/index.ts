@@ -9,6 +9,9 @@ i18n.use(initReactI18next).init({
       translation: translationEN,
     },
   },
+  react: {
+    useSuspense: false,
+  },
   lng: "en",
   fallbackLng: "en",
   interpolation: {

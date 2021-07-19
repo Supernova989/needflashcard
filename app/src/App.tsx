@@ -2,13 +2,12 @@ import React, { FC, lazy } from "react";
 import { Switch, Route, RouteComponentProps, Redirect } from "react-router-dom";
 import { ROUTES } from "./routes";
 import BasicLayout from "./layouts/BasicLayout";
-import NoUserLayout from "./layouts/NoUserLayout";
 import PrivateRoute from "./components/PrivateRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 import LoginLayout from "./layouts/LoginLayout";
 import AboutPage from "./pages/AboutPage";
-import ForgotPage from "./pages/ForgotPage";
+import Index from "./pages/ForgotPage";
 
 const IndexPage = lazy(() => import("./pages/IndexPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
@@ -75,24 +74,24 @@ const App: FC = () => {
           path={ROUTES.ABOUT}
           exact
           component={() => (
-            <NoUserLayout>
+            <BasicLayout disableMenu={true}>
               <AboutPage />
-            </NoUserLayout>
+            </BasicLayout>
           )}
         />
         <Route
           path={ROUTES.FORGOT_PASSWORD}
           exact
           component={() => (
-            <NoUserLayout>
-              <ForgotPage />
-            </NoUserLayout>
+            <BasicLayout disableMenu={true}>
+              <Index />
+            </BasicLayout>
           )}
         />
         <Route
           exact
           component={() => (
-            <BasicLayout>
+            <BasicLayout disableMenu={true}>
               <NotFoundPage />
             </BasicLayout>
           )}

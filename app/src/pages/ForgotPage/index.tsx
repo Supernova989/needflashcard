@@ -1,7 +1,7 @@
 import { FC } from "react";
 
-const ForgotPage: FC = () => {
+const Index: FC = () => {
   return <div>I am ForgotPage</div>;
 };
 
-export default ForgotPage;
+export default Index;

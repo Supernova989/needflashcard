@@ -1,0 +1,80 @@
+.min-h-screen {
+  min-height: 100vh;
+}
+.relative {
+  position: relative;
+}
+.container {
+  width: #{$containerWidth}px;
+  max-width: 100%;
+}
+.flex {
+  display: flex;
+}
+.items-center {
+  align-items: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.p-0 {
+  padding: 0 !important;
+}
+.m-0 {
+  margin: 0 !important;
+}
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+.truncate {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+@for $i from 0 through 9 {
+  .my-#{$i} {
+    margin-top: #{$i * 0.25}rem !important;
+    margin-bottom: #{$i * 0.25}rem !important;
+  }
+  .mx-#{$i} {
+    margin-left: #{$i * 0.25}rem !important;
+    margin-right: #{$i * 0.25}rem !important;
+  }
+  .mt-#{$i} {
+    margin-top: #{$i * 0.25}rem !important;
+  }
+  .mr-#{$i} {
+    margin-right: #{$i * 0.25}rem !important;
+  }
+  .mb-#{$i} {
+    margin-bottom: #{$i * 0.25}rem !important;
+  }
+  .ml-#{$i} {
+    margin-left: #{$i * 0.25}rem !important;
+  }
+  .py-#{$i} {
+    padding-top: #{$i * 0.25}rem !important;
+    padding-bottom: #{$i * 0.25}rem !important;
+  }
+
+  .px-#{$i} {
+    padding-left: #{$i * 0.25}rem !important;
+    padding-right: #{$i * 0.25}rem !important;
+  }
+  .pt-#{$i} {
+    padding-top: #{$i * 0.25}rem !important;
+  }
+  .pr-#{$i} {
+    padding-right: #{$i * 0.25}rem !important;
+  }
+  .pb-#{$i} {
+    padding-bottom: #{$i * 0.25}rem !important;
+  }
+  .pl-#{$i} {
+    padding-left: #{$i * 0.25}rem !important;
+  }
+}

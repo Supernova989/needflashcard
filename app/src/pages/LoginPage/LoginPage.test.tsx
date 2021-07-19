@@ -15,7 +15,7 @@ const token = "tokenYouAreLookingFor";
 
 const server = setupServer(
   rest.post("/api/authenticate", (req, res, ctx) => {
-    const body: BackendLoginResponse = { token };
+    const body: BackendLoginResponse = { error_code: 0, payload: { token } };
     return res(ctx.json(body));
   })
 );
