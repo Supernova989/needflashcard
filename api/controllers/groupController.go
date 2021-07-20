@@ -3,29 +3,45 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io/ioutil"
+	"log"
 	"net/http"
 	cmn "nfc-api/common"
 	m "nfc-api/models"
 	"nfc-api/services"
+	"strconv"
+	"time"
 )
 
 var FindGroups = func(srv services.IGroupService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var filter map[string]interface{}
+		filter := make(map[string]interface{}, 0)
 		q := r.URL.Query().Get("q")
+		page, err := strconv.Atoi(r.URL.Query().Get("p"))
+		if err != nil || page < 0 {
+			page = 0
+		}
+		size, err := strconv.Atoi(r.URL.Query().Get("s"))
+		if err != nil || size < 0 || size > 50 {
+			size = 10
+		}
+
 		if q != "" {
 			err := json.Unmarshal([]byte(q), &filter)
 			if err != nil {
-				cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
+				cmn.WriteJsonResponse(w, nil, http.StatusBadRequest,  &cmn.ErrorInvalidRequest)
 				return
 			}
 		}
 		cp := r.Context().Value(0).(cmn.ContextPayload)
-
-		filter["userId"] = cp.Get("user")
-
-		res, err := srv.Find(filter)
+		userId, err := primitive.ObjectIDFromHex(cp.Get("user"))
+		if err != nil {
+			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorInvalidRequest)
+			return
+		}
+		filter["userId"] = userId
+		res, err := srv.Find(filter, int64(page * size), int64(size))
 		if err != nil {
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
 			return
@@ -61,7 +77,15 @@ var CreateGroup = func(srv services.IGroupService) http.HandlerFunc {
 			return
 		}
 		cp := r.Context().Value(0).(cmn.ContextPayload)
+		group.ID = nil
+		group.CreatedAt = time.Now()
 		group.UserID = cp.Get("user")
+		err, code := group.Validate()
+		if err != nil {
+			log.Println(err.Error())
+			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &code)
+			return
+		}
 		res, err := srv.Insert(group)
 		if err != nil {
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)

@@ -65,7 +65,7 @@ const GroupsPage: FC = () => {
   const searchInputTimeoutRef = useRef<undefined | NodeJS.Timeout>();
   const searchRef = useClickAwayListener(() => setSearchSuggestions([]));
   useEffect(() => {
-    dispatch(getGroups({ userId: "60f1b063c038e4ce3b642faa", num: 10 }));
+    dispatch(getGroups({p: 0, s: 3}));
     return () => {
       if (searchInputTimeoutRef.current) {
         clearTimeout(searchInputTimeoutRef.current);

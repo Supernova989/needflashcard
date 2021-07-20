@@ -1,3 +1,8 @@
+export interface FindOptions {
+  q?: Object;
+  p?: number;
+  s?: number;
+}
 export interface Group {
   id: string;
   title: string;

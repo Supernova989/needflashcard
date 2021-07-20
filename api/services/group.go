@@ -6,12 +6,13 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	m "nfc-api/models"
 )
 
 type IGroupService interface {
 	Get(string) (*m.Group, error)
-	Find(interface{}) ([]m.Group, error)
+	Find(filter interface{}, skip int64, limit int64) ([]m.Group, error)
 	Insert(m.Group) (*m.Group, error)
 	Update(string, interface{}) (m.ResponseUpdate, error)
 	Delete(string) (m.ResponseDelete, error)
@@ -35,12 +36,13 @@ func (c *GroupService) Get(id string) (*m.Group, error) {
 	return &post, nil
 }
 
-func (c *GroupService) Find(filter interface{}) ([]m.Group, error) {
+func (c *GroupService) Find(filter interface{}, skip int64, limit int64) ([]m.Group, error) {
 	posts := make([]m.Group, 0)
 	if filter == nil {
 		filter = bson.M{}
 	}
-	cursor, err := c.Col.Find(c.Ctx, filter)
+
+	cursor, err := c.Col.Find(c.Ctx, filter, &options.FindOptions{Limit: &limit, Skip: &skip })
 	if err != nil {
 		return nil, err
 	}

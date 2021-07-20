@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"nfc-api/common"
+	cmn "nfc-api/common"
 	m "nfc-api/models"
 	"nfc-api/services"
 )
@@ -16,25 +16,25 @@ var AuthenticateUser = func(srv services.IUserService) http.HandlerFunc {
 		cred := m.AuthenticationRequest{}
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
-			common.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
+			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
 			return
 		}
 		err = json.Unmarshal(body, &cred)
 		if err != nil {
 			log.Println(err.Error())
-			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &common.ErrorInvalidRequest)
+			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorInvalidRequest)
 			return
 		}
 		err, code, token, user := srv.Authenticate(cred.Email, cred.Password)
 		if err != nil {
 			log.Println(err.Error())
-			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &code)
+			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &code)
 			return
 		}
 		log.Printf("User %s [%s] logs in", user.Username, user.ID)
 		result := make(map[string]interface{}, 0)
 		result["token"] = token
-		common.WriteJsonResponse(w, result, http.StatusOK, nil)
+		cmn.WriteJsonResponse(w, result, http.StatusOK, nil)
 	}
 }
 
@@ -45,13 +45,13 @@ var RegisterUser = func(srv services.IUserService) http.HandlerFunc {
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			log.Println(err.Error())
-			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &common.ErrorInvalidRequest)
+			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorInvalidRequest)
 			return
 		}
 		err = json.Unmarshal(body, &user)
 		if err != nil {
 			log.Println(err.Error())
-			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &common.ErrorInvalidRequest)
+			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorInvalidRequest)
 			return
 		}
 		// reset fields
@@ -61,23 +61,23 @@ var RegisterUser = func(srv services.IUserService) http.HandlerFunc {
 		err, code := user.Validate()
 		if err != nil {
 			log.Println(err.Error())
-			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &code)
+			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &code)
 			return
 		}
 		//check if email is already used
 		exists, err := srv.CheckIfExists(user.Email, user.Username)
 		if exists || err != nil {
 			log.Printf("username [%s] or email [%s] are already in use", user.Username, user.Email)
-			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &common.ErrorUserExists)
+			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorUserExists)
 			return
 		}
 
 		result, err := srv.Insert(user)
 		if err != nil {
 			log.Println(err.Error())
-			common.WriteJsonResponse(w, nil, http.StatusBadRequest, &code)
+			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &code)
 			return
 		}
-		common.WriteJsonResponse(w, result, http.StatusCreated, nil)
+		cmn.WriteJsonResponse(w, result, http.StatusCreated, nil)
 	}
 }
