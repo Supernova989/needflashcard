@@ -8,48 +8,12 @@ import { useStyles } from "./styles";
 import { useHistory } from "react-router-dom";
 import { TFunction, useTranslation } from "react-i18next";
 import { GroupItem } from "../../components/GroupItem";
-import { Group } from "../../shared/models";
 import clsx from "clsx";
 import { useClickAwayListener } from "../../hooks/useClickAwayListener";
 import Page from "../../components/Page";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { getGroups } from "../../redux/reducers/@groups/actions";
-
-const groups: Group[] = [
-  {
-    id: "group1",
-    title: "Kitchen 1 wegwgwegw weg wegwegwegwgfa afafafaf fafas",
-    description: "Kitchen items and furniture",
-    sort: 10,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: "group2",
-    title: "Kitchen 1",
-    description: "Kitchen items and furniture hdfh dfhdfhd dfhdhdhdfh dfhdf dfhd hdfh dfhdfhdfhdfh dfh dfh dhdfh dsdg.",
-    sort: 10,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: "group3",
-    title: "Kitchen 1",
-    description: "Kitchen items and furniture",
-    sort: 10,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: "group4",
-    title: "Kitchen 1",
-    description: "Kitchen items and furniture",
-    sort: 10,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-];
 
 export const getSearchSchema = (t: TFunction) =>
   Yup.object().shape({
@@ -61,11 +25,12 @@ const GroupsPage: FC = () => {
   const history = useHistory();
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
+  const { groups: groupState } = useSelector((state: RootState) => state);
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
   const searchInputTimeoutRef = useRef<undefined | NodeJS.Timeout>();
   const searchRef = useClickAwayListener(() => setSearchSuggestions([]));
   useEffect(() => {
-    dispatch(getGroups({p: 0, s: 3}));
+    dispatch(getGroups());
     return () => {
       if (searchInputTimeoutRef.current) {
         clearTimeout(searchInputTimeoutRef.current);
@@ -131,7 +96,7 @@ const GroupsPage: FC = () => {
       </div>
 
       <ul className={"flex flex-wrap justify-between"}>
-        {groups.map((group) => {
+        {groupState.items.map((group) => {
           return (
             <li key={group.id} className={clsx("mb-3", classes.group)}>
               <GroupItem group={group} onClick={handleLink} />

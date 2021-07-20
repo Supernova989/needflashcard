@@ -19,7 +19,7 @@ export type Payload = {
 };
 
 export const reducer = createReducer(initialState, (builder) => {
-  builder.addCase(ac_login.type, (state, { payload }: PayloadAction<Payload>) => {
+  builder.addCase(ac_login, (state, { payload }) => {
     state.token = payload.token;
     state.userID = payload.userID;
     if (payload.token) {

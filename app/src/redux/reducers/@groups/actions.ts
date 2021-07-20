@@ -1,7 +1,12 @@
 import { AppThunk } from "../../store";
 import apiClient from "../../../shared/api";
 import { getBearer } from "../../../shared/utils";
-import { FindOptions } from "../../../shared/models";
+import { FindOptions, Group, Response } from "../../../shared/models";
+import { createAction } from "@reduxjs/toolkit";
+import { SET_GROUPS } from "../../types";
+import { GetGroupsResponse, PayloadSetGroups } from "./interfaces";
+
+export const ac_setGroups = createAction<PayloadSetGroups>(SET_GROUPS);
 
 export const getGroups = (options?: FindOptions): AppThunk => {
   let url = `/v1/groups`;
@@ -9,10 +14,9 @@ export const getGroups = (options?: FindOptions): AppThunk => {
   if (params.q) {
     params.q = JSON.stringify(params.q);
   }
-  console.log("here2", {params});
   return (dispatch, getState) => {
     return apiClient
-      .request({
+      .request<GetGroupsResponse>({
         method: "GET",
         params: params,
         headers: {
@@ -20,7 +24,11 @@ export const getGroups = (options?: FindOptions): AppThunk => {
         },
         url,
       })
-      .then(() => {})
+      .then((res) => {
+        if (res.data?.payload) {
+          dispatch(ac_setGroups({ groups: res.data.payload }));
+        }
+      })
       .catch(() => {});
   };
 };

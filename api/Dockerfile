@@ -1,4 +1,4 @@
-FROM golang:1.16.0-alpine3.13
+FROM golang:1.16.6-alpine3.14
 COPY . /app
 WORKDIR /app
 EXPOSE 3010

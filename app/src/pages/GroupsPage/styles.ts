@@ -8,10 +8,7 @@ export const useStyles = createUseStyles({
   },
   group: {
     transition: "ease 0.2s",
-    width: "24%",
-    [`@media (max-width: ${BREAKPOINTS.XL}px)`]: {
-      width: "49%",
-    },
+    width: "49%",
     [`@media (max-width: ${BREAKPOINTS.M}px)`]: {
       width: "100%",
     },

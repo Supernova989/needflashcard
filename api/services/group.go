@@ -42,7 +42,12 @@ func (c *GroupService) Find(filter interface{}, skip int64, limit int64) ([]m.Gr
 		filter = bson.M{}
 	}
 
-	cursor, err := c.Col.Find(c.Ctx, filter, &options.FindOptions{Limit: &limit, Skip: &skip })
+	opts := &options.FindOptions{
+		Limit: &limit,
+		Skip: &skip,
+		Sort: bson.M{"created_at": -1},
+	}
+	cursor, err := c.Col.Find(c.Ctx, filter, opts)
 	if err != nil {
 		return nil, err
 	}

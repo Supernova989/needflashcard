@@ -1,9 +1,11 @@
 import { configureStore, ThunkAction, Action, Store, applyMiddleware } from "@reduxjs/toolkit";
 import { reducer as authReducer } from "./reducers/@auth";
+import { reducer as groupReducer } from "./reducers/@groups";
 import logger from "redux-logger";
 
 export const rootReducer = {
   auth: authReducer,
+  groups: groupReducer,
 };
 
 const store = configureStore({
