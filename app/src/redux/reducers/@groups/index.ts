@@ -1,6 +1,6 @@
-import { createReducer, PayloadAction } from "@reduxjs/toolkit";
+import { createReducer } from "@reduxjs/toolkit";
 import { Group } from "../../../shared/models";
-import { ac_setGroups } from "./actions";
+import { setGroups } from "./actions";
 
 export interface State {
   items: Group[];
@@ -12,7 +12,7 @@ const initialState: State = {
 };
 
 export const reducer = createReducer(initialState, (builder) => {
-  builder.addCase(ac_setGroups, (state, { payload: { groups, page, size } }) => {
+  builder.addCase(setGroups, (state, { payload: { groups, page, size } }) => {
     state.items = groups;
     state.page = page;
     state.size = size;

@@ -9,6 +9,7 @@ interface Props {
   id?: string;
   value?: string;
   error?: string;
+  maxLength?: number;
   disabled?: boolean;
   className?: string;
   touched?: boolean;
@@ -22,8 +23,22 @@ interface Props {
 }
 
 const Input = forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const { name, id, block, touched, autoCompletion, testId, disabled, className, error, type, value, label, ...rest } =
-    props;
+  const {
+    name,
+    id,
+    maxLength,
+    block,
+    touched,
+    autoCompletion,
+    testId,
+    disabled,
+    className,
+    error,
+    type,
+    value,
+    label,
+    ...rest
+  } = props;
   const classes = useStyles();
 
   const autoCompletionList = (
@@ -45,6 +60,7 @@ const Input = forwardRef<HTMLDivElement, Props>((props, ref) => {
           autoCorrect="off"
           autoComplete="off"
           id={id}
+          maxLength={maxLength}
           placeholder={label}
           className={clsx(classes.input, { [classes.notEmpty]: value?.length })}
           name={name}

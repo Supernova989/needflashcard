@@ -12,6 +12,7 @@
     "PASSWORD": "Пароль"
   },
   "ERRORS": {
+    "INVALID_CREDENTIALS": "Wrong user/ password",
     "REQUIRED": "Поле обязательно",
     "INVALID_EMAIL": "Неправльный email",
     "TOO_SHORT": "Слишком длинное значение",

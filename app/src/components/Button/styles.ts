@@ -11,6 +11,8 @@ export const useStyles = createUseStyles({
     cursor: "pointer",
     "&:disabled": {
       cursor: "default",
+      color: "#a5a5a5 !important",
+      backgroundColor: "#cecece !important",
     },
     "&.primary": {
       color: "#FFFFFF",

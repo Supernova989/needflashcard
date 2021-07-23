@@ -1,7 +1,8 @@
-import { configureStore, ThunkAction, Action, Store, applyMiddleware } from "@reduxjs/toolkit";
+import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import { reducer as authReducer } from "./reducers/@auth";
 import { reducer as groupReducer } from "./reducers/@groups";
 import logger from "redux-logger";
+import { BaseThunkAPI } from "@reduxjs/toolkit/dist/createAsyncThunk";
 
 export const rootReducer = {
   auth: authReducer,
@@ -14,8 +15,12 @@ const store = configureStore({
   devTools: process.env.NODE_ENV !== "production",
 });
 
-export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action<string>>;
+export type AppAsyncThunkApi<RV = number> = BaseThunkAPI<RootState, unknown, AppDispatch> & {
+  rejectValue: RV;
+  state: RootState;
+};
 
 export default store;

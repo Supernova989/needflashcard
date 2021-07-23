@@ -1,5 +1,5 @@
-import { createReducer, PayloadAction } from "@reduxjs/toolkit";
-import { ac_login } from "./actions";
+import { createReducer } from "@reduxjs/toolkit";
+import { login } from "./actions";
 
 const storage: Storage = localStorage;
 const TOKEN_STORAGE_NAME = "__token";
@@ -19,7 +19,7 @@ export type Payload = {
 };
 
 export const reducer = createReducer(initialState, (builder) => {
-  builder.addCase(ac_login, (state, { payload }) => {
+  builder.addCase(login, (state, { payload }) => {
     state.token = payload.token;
     state.userID = payload.userID;
     if (payload.token) {

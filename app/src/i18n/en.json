@@ -12,6 +12,7 @@
     "PASSWORD": "Password"
   },
   "ERRORS": {
+    "INVALID_CREDENTIALS": "Wrong user/ password",
     "REQUIRED": "Field is required",
     "INVALID_EMAIL": "Invalid email",
     "TOO_SHORT": "Too short",

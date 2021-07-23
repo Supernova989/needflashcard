@@ -2,11 +2,11 @@ import React, { BaseSyntheticEvent, FC, useEffect, useRef, useState } from "reac
 import { getGroupURL } from "../../shared/utils";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
-import { Formik, FormikHelpers } from "formik";
+import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
 import { useStyles } from "./styles";
 import { useHistory } from "react-router-dom";
-import { TFunction, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { GroupItem } from "../../components/GroupItem";
 import clsx from "clsx";
 import { useClickAwayListener } from "../../hooks/useClickAwayListener";
@@ -15,14 +15,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { getGroups } from "../../redux/reducers/@groups/actions";
 
-export const getSearchSchema = (t: TFunction) =>
-  Yup.object().shape({
-    query: Yup.string().min(3, t("ERRORS.TOO_SHORT")).max(120, t("ERRORS.TOO_LONG")),
-  });
+const QUERY_MAX_LENGTH = 120;
+
+export const searchSchema = Yup.object({
+  query: Yup.string().min(3).max(QUERY_MAX_LENGTH),
+});
+
+export type SearchFormFields = Yup.InferType<typeof searchSchema>;
 
 const GroupsPage: FC = () => {
   const classes = useStyles();
   const history = useHistory();
+  const formRef = useRef<FormikProps<SearchFormFields> | null>(null);
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const { groups: groupState } = useSelector((state: RootState) => state);
@@ -40,10 +44,13 @@ const GroupsPage: FC = () => {
 
   const handleLink = (id: string) => history.push(getGroupURL(id));
 
-  const handlePickSuggestion = (props: FormikHelpers<{ query: string }>) => (suggestion: string) => {
-    props.setFieldValue("query", suggestion);
+  const handlePickSuggestion = (suggestion: string) => {
     setSearchSuggestions([]);
+    if (formRef.current) {
+      formRef.current?.setFieldValue("query", suggestion);
+    }
   };
+
   const handleSearchChange = (e: BaseSyntheticEvent) => {
     if (searchInputTimeoutRef.current) {
       clearTimeout(searchInputTimeoutRef.current);
@@ -52,12 +59,14 @@ const GroupsPage: FC = () => {
       setSearchSuggestions([...searchSuggestions, e.target.value]);
     }, 1000);
   };
+
   return (
     <Page heading={"Your collections"}>
       <div className={"mb-3"}>
         <Formik
+          innerRef={formRef}
           initialValues={{ query: "" }}
-          validationSchema={getSearchSchema(t)}
+          validationSchema={searchSchema}
           onSubmit={({ query }, actions) => {}}
         >
           {({ values, touched, errors, ...props }) => (
@@ -78,12 +87,13 @@ const GroupsPage: FC = () => {
                 }}
                 onBlur={props.handleBlur}
                 value={values.query}
-                error={errors.query}
+                error={t(errors.query!)}
                 touched={touched.query}
                 ref={searchRef}
+                maxLength={QUERY_MAX_LENGTH}
                 autoCompletion={{
                   list: searchSuggestions,
-                  onClick: handlePickSuggestion(props),
+                  onClick: handlePickSuggestion,
                 }}
               />
 
