@@ -26,6 +26,7 @@ type IUserService interface {
 type UserService struct {
 	Ctx context.Context
 	Col *mongo.Collection
+	DB  *mongo.Database
 }
 
 func (c *UserService) Authenticate(email string, password string) (error, int, string, *m.User) {

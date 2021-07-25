@@ -6,13 +6,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	m "nfc-api/models"
 )
 
 type IGroupService interface {
 	Get(string) (*m.Group, error)
-	Find(filter interface{}, skip int64, limit int64) ([]m.Group, error)
+	Find(filter primitive.M, skip int64, limit int64) ([]m.Group, error)
 	Insert(m.Group) (*m.Group, error)
 	Update(string, interface{}) (m.ResponseUpdate, error)
 	Delete(string) (m.ResponseDelete, error)
@@ -21,42 +20,47 @@ type IGroupService interface {
 type GroupService struct {
 	Ctx context.Context
 	Col *mongo.Collection
+	DB  *mongo.Database
 }
 
 func (c *GroupService) Get(id string) (*m.Group, error) {
-	post := m.Group{}
+	group := m.Group{}
 	_id, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
 	}
-	err = c.Col.FindOne(c.Ctx, bson.M{"_id": _id}).Decode(&post)
+	err = c.Col.FindOne(c.Ctx, bson.M{"_id": _id}).Decode(&group)
 	if err != nil {
 		return nil, err
 	}
-	return &post, nil
+	return &group, nil
 }
 
-func (c *GroupService) Find(filter interface{}, skip int64, limit int64) ([]m.Group, error) {
-	posts := make([]m.Group, 0)
+func (c *GroupService) Find(filter primitive.M, skip int64, limit int64) ([]m.Group, error) {
+	groups := make([]m.Group, 0)
 	if filter == nil {
 		filter = bson.M{}
 	}
-
-	opts := &options.FindOptions{
-		Limit: &limit,
-		Skip:  &skip,
-		Sort:  bson.M{"created_at": -1},
-	}
-	cursor, err := c.Col.Find(c.Ctx, filter, opts)
+	showLoadedStructCursor, err := c.Col.Aggregate(c.Ctx, mongo.Pipeline{
+		bson.D{{"$skip", &skip}},
+		bson.D{{"$limit", &limit}},
+		bson.D{{"$sort", bson.M{"created_at": -1}}},
+		bson.D{{"$match", filter}},
+		bson.D{{"$lookup", bson.D{
+			{"from", "Words"},
+			{"localField", "_id"},
+			{"foreignField", "groupId"},
+			{"as", "words"},
+		}}},
+		bson.D{{"$addFields", bson.M{"words": bson.M{"$size": "$words"}}}},
+	})
 	if err != nil {
 		return nil, err
 	}
-	for cursor.Next(c.Ctx) {
-		doc := m.Group{}
-		cursor.Decode(&doc)
-		posts = append(posts, doc)
+	if err = showLoadedStructCursor.All(c.Ctx, &groups); err != nil {
+		return nil, err
 	}
-	return posts, nil
+	return groups, nil
 }
 
 func (c *GroupService) Insert(doc m.Group) (*m.Group, error) {

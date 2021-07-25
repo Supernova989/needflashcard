@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io/ioutil"
 	"log"
@@ -16,7 +17,7 @@ import (
 
 var FindGroups = func(srv services.IGroupService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		filter := make(map[string]interface{}, 0)
+		filter := bson.M{}
 		q := r.URL.Query().Get("q")
 		page, err := strconv.Atoi(r.URL.Query().Get("p"))
 		if err != nil || page < 0 {
@@ -83,8 +84,10 @@ var CreateGroup = func(srv services.IGroupService) http.HandlerFunc {
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorInvalidRequest)
 			return
 		}
+		// reset ID field
 		group.ID = nil
 		group.CreatedAt = time.Now()
+		// grab UserId from the context and use it as the owner
 		group.UserID = &userId
 		err, code := group.Validate()
 		if err != nil {

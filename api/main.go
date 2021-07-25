@@ -18,11 +18,19 @@ func main() {
 	userService := &services.UserService{
 		Col: database.GetDB().Collection(config.GetConfig().Mongo.Collections.Users),
 		Ctx: database.GetGlobalContext(),
+		DB:  database.GetDB(),
 	}
 
 	groupService := &services.GroupService{
 		Col: database.GetDB().Collection(config.GetConfig().Mongo.Collections.Groups),
 		Ctx: database.GetGlobalContext(),
+		DB:  database.GetDB(),
+	}
+
+	wordService := &services.WordService{
+		Col: database.GetDB().Collection(config.GetConfig().Mongo.Collections.Words),
+		Ctx: database.GetGlobalContext(),
+		DB:  database.GetDB(),
 	}
 
 	r := mux.NewRouter()
@@ -39,6 +47,8 @@ func main() {
 	r.Handle("/api/v1/groups", mw.JwtAuthMiddleware(controllers.CreateGroup(groupService), userService)).Methods("POST", "OPTIONS")
 	r.Handle("/api/v1/groups/{id}", mw.JwtAuthMiddleware(controllers.PatchPost(groupService), userService)).Methods("PATCH", "OPTIONS")
 	r.Handle("/api/v1/groups/{id}", mw.JwtAuthMiddleware(controllers.DeletePost(groupService), userService)).Methods("DELETE", "OPTIONS")
+
+	r.Handle("/api/v1/groups/{id}/words", mw.JwtAuthMiddleware(controllers.CreateWord(wordService), userService)).Methods("POST", "OPTIONS")
 
 	//On start
 	log.Println(fmt.Sprintf("App's running on port: 3010"))

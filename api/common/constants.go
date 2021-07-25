@@ -8,6 +8,13 @@ var ErrorLongTitle = 10014
 var ErrorShortDescription = 10015
 var ErrorLongDescription = 10016
 var ErrorNoUserOwner = 10017
+var ErrorShortWord = 10018
+var ErrorLongWord = 10019
+var ErrorShortDefinition = 10019001
+var ErrorLongDefinition = 10019002
+var ErrorNoExamples = 10019003
+var ErrorTooManyExamples = 10019004
+var ErrorLongExample = 10019005
 
 var ErrorShortPassword = 10020
 var ErrorLongPassword = 10021

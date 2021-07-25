@@ -14,7 +14,7 @@ type Group struct {
 	Title       string              `json:"title" bson:"title"`
 	Description string              `json:"description" bson:"description"`
 	CreatedAt   time.Time           `json:"created_at" bson:"created_at"`
-	Words       int                 `json:"words" bson:"-"`
+	Words       int                 `json:"words"  bson:"words,omitempty"`
 }
 
 func (g *Group) Validate() (error, int) {
