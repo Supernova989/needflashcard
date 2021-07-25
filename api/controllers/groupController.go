@@ -42,12 +42,13 @@ var FindGroups = func(srv services.IGroupService) http.HandlerFunc {
 			return
 		}
 		filter["userId"] = userId
-		res, err := srv.Find(filter, int64(page*size), int64(size))
+		res, total, err := srv.Find(filter, int64(page*size), int64(size))
 		if err != nil {
+			log.Println(err.Error())
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
 			return
 		}
-		cmn.WriteJsonResponse(w, res, http.StatusOK, nil)
+		cmn.WriteJsonResponse(w, cmn.PaginateData(res, page, size, total), http.StatusOK, nil)
 	}
 }
 

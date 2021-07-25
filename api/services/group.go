@@ -11,7 +11,7 @@ import (
 
 type IGroupService interface {
 	Get(string) (*m.Group, error)
-	Find(filter primitive.M, skip int64, limit int64) ([]m.Group, error)
+	Find(filter primitive.M, skip int64, limit int64) (data []m.Group, total int, error error)
 	Insert(m.Group) (*m.Group, error)
 	Update(string, interface{}) (m.ResponseUpdate, error)
 	Delete(string) (m.ResponseDelete, error)
@@ -36,15 +36,20 @@ func (c *GroupService) Get(id string) (*m.Group, error) {
 	return &group, nil
 }
 
-func (c *GroupService) Find(filter primitive.M, skip int64, limit int64) ([]m.Group, error) {
-	groups := make([]m.Group, 0)
+func (c *GroupService) Find(filter primitive.M, skip int64, limit int64) ([]m.Group, int, error) {
+	type QueryResult struct {
+		Data  []m.Group `bson:"data"`
+		Total int       `bson:"total"`
+	}
+	qr := make([]QueryResult, 0)
 	if filter == nil {
 		filter = bson.M{}
 	}
-	showLoadedStructCursor, err := c.Col.Aggregate(c.Ctx, mongo.Pipeline{
+	countQuery := bson.A{bson.D{{"$count", "total"}}}
+	dataQuery := bson.A{
+		bson.D{{"$sort", bson.M{"created_at": -1}}},
 		bson.D{{"$skip", &skip}},
 		bson.D{{"$limit", &limit}},
-		bson.D{{"$sort", bson.M{"created_at": -1}}},
 		bson.D{{"$match", filter}},
 		bson.D{{"$lookup", bson.D{
 			{"from", "Words"},
@@ -53,14 +58,25 @@ func (c *GroupService) Find(filter primitive.M, skip int64, limit int64) ([]m.Gr
 			{"as", "words"},
 		}}},
 		bson.D{{"$addFields", bson.M{"words": bson.M{"$size": "$words"}}}},
+	}
+
+	showLoadedStructCursor, err := c.Col.Aggregate(c.Ctx, mongo.Pipeline{
+		bson.D{{"$facet", bson.D{
+			{"data", dataQuery},
+			{"metadata", countQuery},
+		}}},
+		bson.D{{"$project", bson.D{
+			{"total", bson.D{{"$arrayElemAt", bson.A{"$metadata.total", 0}}}},
+			{"data", 1},
+		}}},
 	})
 	if err != nil {
-		return nil, err
+		return nil, 0, err
 	}
-	if err = showLoadedStructCursor.All(c.Ctx, &groups); err != nil {
-		return nil, err
+	if err = showLoadedStructCursor.All(c.Ctx, &qr); err != nil {
+		return nil, 0, err
 	}
-	return groups, nil
+	return qr[0].Data, qr[0].Total, nil
 }
 
 func (c *GroupService) Insert(doc m.Group) (*m.Group, error) {

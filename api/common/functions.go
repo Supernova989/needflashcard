@@ -10,12 +10,22 @@ import (
 )
 
 type JsonResponse struct {
-	Payload      interface{} `json:"payload"`
-	ErrorCode    *int        `json:"error_code,omitempty"`
+	Payload   interface{} `json:"payload"`
+	ErrorCode *int        `json:"error_code,omitempty"`
 }
 
 type ContextPayload struct {
 	M map[string]string
+}
+
+func PaginateData(data interface{}, page int, size int, total int) interface{} {
+	type Body struct {
+		Size    int         `json:"size"`
+		Page    int         `json:"page"`
+		Total   int         `json:"total"`
+		Entries interface{} `json:"entries"`
+	}
+	return Body{Size: size, Page: page, Total: total, Entries: data}
 }
 func (c *ContextPayload) Get(key string) string {
 	return c.M[key]
