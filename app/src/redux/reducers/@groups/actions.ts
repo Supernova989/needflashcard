@@ -23,7 +23,8 @@ export const getGroups = createAsyncThunk<void, FindOptions | undefined, AppAsyn
         url: "/v1/groups",
       });
       if (response.data?.payload) {
-        dispatch(setGroups({ groups: response.data.payload }));
+        const {entries, page, size, total} = response.data.payload;
+        dispatch(setGroups({ groups: entries, page, size, total }));
       }
     } catch (e) {
       return rejectWithValue(e.response?.data.error_code);
