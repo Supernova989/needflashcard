@@ -2,17 +2,19 @@ package models
 
 import (
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"nfc-api/common"
 	"time"
 	"unicode/utf8"
 )
 
 type Group struct {
-	ID          interface{} `json:"id,omitempty" bson:"_id,omitempty"`
-	UserID      interface{}         `json:"userId" bson:"userId"`
-	Title       string      `json:"title" bson:"title"`
-	Description string      `json:"description" bson:"description"`
-	CreatedAt   time.Time   `json:"created_at" bson:"created_at"`
+	ID          *primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	UserID      *primitive.ObjectID `json:"userId" bson:"userId"`
+	Title       string              `json:"title" bson:"title"`
+	Description string              `json:"description" bson:"description"`
+	CreatedAt   time.Time           `json:"created_at" bson:"created_at"`
+	Words       int                 `json:"words" bson:"-"`
 }
 
 func (g *Group) Validate() (error, int) {

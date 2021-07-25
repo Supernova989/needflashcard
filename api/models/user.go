@@ -2,17 +2,18 @@ package models
 
 import (
 	"fmt"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"nfc-api/common"
 	"unicode/utf8"
 )
 
 type User struct {
-	ID        interface{} `json:"id,omitempty" bson:"_id,omitempty"`
-	Email     string      `json:"email" bson:"email"`
-	Confirmed bool        `json:"confirmed" bson:"confirmed"`
-	Blocked   bool        `json:"blocked" bson:"blocked"`
-	Username  string      `json:"username" bson:"username"`
-	Password  string      `json:"password,omitempty" bson:"password"`
+	ID        *primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
+	Email     string              `json:"email" bson:"email"`
+	Confirmed bool                `json:"confirmed" bson:"confirmed"`
+	Blocked   bool                `json:"blocked" bson:"blocked"`
+	Username  string              `json:"username" bson:"username"`
+	Password  string              `json:"password,omitempty" bson:"password"`
 }
 
 func (u *User) Validate() (error, int) {

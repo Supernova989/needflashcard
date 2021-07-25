@@ -44,8 +44,8 @@ func (c *GroupService) Find(filter interface{}, skip int64, limit int64) ([]m.Gr
 
 	opts := &options.FindOptions{
 		Limit: &limit,
-		Skip: &skip,
-		Sort: bson.M{"created_at": -1},
+		Skip:  &skip,
+		Sort:  bson.M{"created_at": -1},
 	}
 	cursor, err := c.Col.Find(c.Ctx, filter, opts)
 	if err != nil {
@@ -60,11 +60,6 @@ func (c *GroupService) Find(filter interface{}, skip int64, limit int64) ([]m.Gr
 }
 
 func (c *GroupService) Insert(doc m.Group) (*m.Group, error) {
-	userId, err := primitive.ObjectIDFromHex(doc.UserID.(string))
-	if err != nil {
-		return nil, err
-	}
-	doc.UserID = userId
 	res, err := c.Col.InsertOne(c.Ctx, doc)
 	if err != nil {
 		return nil, err

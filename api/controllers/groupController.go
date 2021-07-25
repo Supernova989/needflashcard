@@ -30,7 +30,7 @@ var FindGroups = func(srv services.IGroupService) http.HandlerFunc {
 		if q != "" {
 			err := json.Unmarshal([]byte(q), &filter)
 			if err != nil {
-				cmn.WriteJsonResponse(w, nil, http.StatusBadRequest,  &cmn.ErrorInvalidRequest)
+				cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorInvalidRequest)
 				return
 			}
 		}
@@ -41,7 +41,7 @@ var FindGroups = func(srv services.IGroupService) http.HandlerFunc {
 			return
 		}
 		filter["userId"] = userId
-		res, err := srv.Find(filter, int64(page * size), int64(size))
+		res, err := srv.Find(filter, int64(page*size), int64(size))
 		if err != nil {
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
 			return
@@ -77,9 +77,15 @@ var CreateGroup = func(srv services.IGroupService) http.HandlerFunc {
 			return
 		}
 		cp := r.Context().Value(0).(cmn.ContextPayload)
+		userId, err := primitive.ObjectIDFromHex(cp.Get("user"))
+		if err != nil {
+			log.Println(err.Error())
+			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorInvalidRequest)
+			return
+		}
 		group.ID = nil
 		group.CreatedAt = time.Now()
-		group.UserID = cp.Get("user")
+		group.UserID = &userId
 		err, code := group.Validate()
 		if err != nil {
 			log.Println(err.Error())
