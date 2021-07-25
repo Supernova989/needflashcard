@@ -3,11 +3,9 @@ package controllers
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
-	"nfc-api/common"
 	"nfc-api/database"
 	m "nfc-api/models"
 	"nfc-api/services"
@@ -15,66 +13,64 @@ import (
 	"testing"
 )
 
-var userService services.IUserService
-
 func init() {
 	conf := m.MongoConfiguration{
-		Server:   "mongodb://localhost:27017",
-		Database: "Nfc_db_test",
+		Server:   mongoTestHost,
+		Database: mongoTestDB,
 	}
 	ctx := context.TODO()
 
 	db := database.ConnectDB(ctx, conf)
-	collection := db.Collection("Users")
+	db.Drop(ctx)
+	userCollection := db.Collection("Users")
 
 	userService = &services.UserService{
-		Col: collection,
+		Col: userCollection,
 		Ctx: ctx,
 	}
 }
 
-func TestCreateUser(t *testing.T) {
+func TestUserControllers(t *testing.T) {
 	id := "abcdefg123"
 	username := "John Doe"
 	password := "strongPassword123"
 	email := "j.doe@somedomain.com"
 
-	tests := map[string]struct {
-		payload           string
-		expectedCode      int
-		expectedUsername  string
-		expectedEmail     string
-		expectedConfirmed bool
-	}{
-		"should return 201 and a proper payload": {
-			payload:           fmt.Sprintf("{\"id\":\"%s\",\"username\":\"%s\",\"password\":\"%s\",\"email\":\"%s\"}", id, username, password, email),
-			expectedCode:      http.StatusCreated,
-			expectedUsername:  username,
-			expectedEmail:     email,
-			expectedConfirmed: false,
-		},
+	type Response struct {
+		Payload   map[string]interface{} `json:"payload"`
+		ErrorCode *int                   `json:"error_code,omitempty"`
 	}
 
-	for name, test := range tests {
-		t.Run(name, func(t *testing.T) {
-			req, _ := http.NewRequest("POST", "/register", strings.NewReader(test.payload))
-			recorder := httptest.NewRecorder()
-			h := http.HandlerFunc(RegisterUser(userService))
-			h.ServeHTTP(recorder, req)
+	t.Run("should register user", func(t *testing.T) {
+		bytes, _ := json.Marshal(map[string]interface{}{"id": id, "username": username, "password": password, "email": email})
+		req, _ := http.NewRequest("POST", "/register", strings.NewReader(string(bytes)))
+		recorder := httptest.NewRecorder()
+		h := http.HandlerFunc(RegisterUser(userService))
+		h.ServeHTTP(recorder, req)
 
-			resp := common.JsonResponse{}
-			_ = json.Unmarshal([]byte(recorder.Body.String()), &resp)
-			assert.NotNil(t, resp.Payload)
+		resp := Response{}
+		_ = json.Unmarshal([]byte(recorder.Body.String()), &resp)
+		assert.NotNil(t, resp.Payload)
+		assert.Equal(t, http.StatusCreated, recorder.Code)
+		assert.Equal(t, username, resp.Payload["username"])
+		assert.Equal(t, email, resp.Payload["email"])
+		assert.Equal(t, false, resp.Payload["confirmed"])
+		assert.Nil(t, resp.Payload["password"])
+		assert.NotEqual(t, id, resp.Payload["id"])
+	})
+	t.Run("should authenticate user", func(t *testing.T) {
+		bytes, _ := json.Marshal(map[string]interface{}{"password": password, "email": email})
+		req, _ := http.NewRequest("POST", "/authenticate", strings.NewReader(string(bytes)))
+		recorder := httptest.NewRecorder()
+		h := http.HandlerFunc(AuthenticateUser(userService))
+		h.ServeHTTP(recorder, req)
 
-			if test.expectedCode == http.StatusCreated && resp.Payload != nil {
-				assert.Equal(t, test.expectedUsername, resp.Payload.(map[string]interface{})["username"])
-				assert.Equal(t, test.expectedEmail, resp.Payload.(map[string]interface{})["email"])
-				assert.Equal(t, test.expectedConfirmed, resp.Payload.(map[string]interface{})["confirmed"])
-				assert.Equal(t, nil, resp.Payload.(map[string]interface{})["password"])
-				assert.NotEqual(t, id, resp.Payload.(map[string]interface{})["id"])
-				_, _ = userService.Delete(resp.Payload.(map[string]interface{})["id"].(string))
-			}
-			assert.Equal(t, test.expectedCode, recorder.Code)
-		})
-	}
+		resp := Response{}
+		_ = json.Unmarshal([]byte(recorder.Body.String()), &resp)
+		assert.NotNil(t, resp.Payload)
+		assert.Equal(t, http.StatusOK, recorder.Code)
+		assert.NotEmpty(t, resp.Payload["token"])
+		assert.Contains(t, resp.Payload["token"], "eyJhb")
+	})
+
 }

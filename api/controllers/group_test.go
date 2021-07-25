@@ -15,24 +15,19 @@ import (
 	"testing"
 )
 
-var postService services.IGroupService
-
-var testServer = "mongodb://localhost:27017"
-const testDB = "Nfc_db_test"
-const testCollection = "Groups"
-
 func init() {
 	conf := m.MongoConfiguration{
-		Server:   testServer,
-		Database: testDB,
+		Server:   mongoTestHost,
+		Database: mongoTestDB,
 	}
 	ctx := context.TODO()
 
 	db := database.ConnectDB(ctx, conf)
-	collection := db.Collection(testCollection)
+	db.Drop(ctx)
+	testCollection := db.Collection("Groups")
 
 	postService = &services.GroupService{
-		Col: collection,
+		Col: testCollection,
 		Ctx: ctx,
 	}
 }
