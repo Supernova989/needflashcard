@@ -48,7 +48,7 @@ func main() {
 	r.Handle("/api/v1/groups/{id}", mw.JwtAuthMiddleware(controllers.PatchPost(groupService), userService)).Methods("PATCH", "OPTIONS")
 	r.Handle("/api/v1/groups/{id}", mw.JwtAuthMiddleware(controllers.DeletePost(groupService), userService)).Methods("DELETE", "OPTIONS")
 
-	r.Handle("/api/v1/groups/{id}/words", mw.JwtAuthMiddleware(controllers.CreateWord(wordService), userService)).Methods("POST", "OPTIONS")
+	r.Handle("/api/v1/words", mw.JwtAuthMiddleware(controllers.CreateWord(wordService), userService)).Methods("POST", "OPTIONS")
 
 	//On start
 	log.Println(fmt.Sprintf("App's running on port: 3010"))

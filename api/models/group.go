@@ -14,6 +14,7 @@ type Group struct {
 	Title       string              `json:"title" bson:"title"`
 	Description string              `json:"description" bson:"description"`
 	CreatedAt   time.Time           `json:"created_at" bson:"created_at"`
+	UpdatedAt   time.Time           `json:"updated_at" bson:"updated_at,omitempty"`
 	Words       int                 `json:"words"  bson:"words,omitempty"`
 }
 

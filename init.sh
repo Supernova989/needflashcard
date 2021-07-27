@@ -13,6 +13,8 @@ HOST_UI=
 HOST_API=
 HOST_TRAEFIK=
 
+SECRET=
+
 #### Mailgun
 MG_DOMAIN=mg.mydomain.com
 MG_API_KEY=

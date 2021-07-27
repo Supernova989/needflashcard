@@ -6,6 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	m "nfc-api/models"
+	"time"
 )
 
 type IWordService interface {
@@ -37,10 +38,38 @@ func (c *WordService) Get(id string) (*m.Word, error) {
 }
 
 func (c *WordService) Insert(doc m.Word, user primitive.ObjectID) (*m.Word, error) {
-	res, err := c.Col.InsertOne(c.Ctx, doc)
+	var inserted *mongo.InsertOneResult
+	err := c.DB.Client().UseSession(c.Ctx, func(sessionContext mongo.SessionContext) error {
+		err := sessionContext.StartTransaction()
+		if err != nil {
+			sessionContext.AbortTransaction(sessionContext)
+			return err
+		}
+		inserted, err = c.Col.InsertOne(c.Ctx, doc)
+		if err != nil {
+			sessionContext.AbortTransaction(sessionContext)
+			return err
+		}
+		groupIds := bson.A{}
+		for _, id := range doc.GroupID {
+			groupIds = append(groupIds, id)
+		}
+		_, err = c.DB.Collection("Groups").UpdateMany(
+			c.Ctx,
+			bson.D{{"_id", bson.D{{"$in", groupIds}}}},
+			bson.D{{"$set", bson.D{{"updated_at", time.Now()}}}},
+		)
+		if err != nil {
+			sessionContext.AbortTransaction(sessionContext)
+			return err
+		} else {
+			sessionContext.CommitTransaction(sessionContext)
+		}
+		return nil
+	})
 	if err != nil {
 		return nil, err
 	}
-	id := res.InsertedID.(primitive.ObjectID).Hex()
+	id := inserted.InsertedID.(primitive.ObjectID).Hex()
 	return c.Get(id)
 }

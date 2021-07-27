@@ -30,6 +30,10 @@ services:
   frontend:
     build:
       context: ./app
+      args:
+        HOST_API: "${HOST_API}"
+        USE_CAPTCHA: "${USE_CAPTCHA}"
+        CAPTCHA_PUBLIC_KEY: "${CAPTCHA_PUBLIC_KEY}"
     depends_on:
       - api
     restart: always
@@ -67,6 +71,8 @@ services:
       - "traefik.http.routers.api.rule=Host(`${HOST_API}`)"
       - "traefik.http.routers.api.service=api"
       - "traefik.http.services.api.loadbalancer.server.port=3010"
+    env_file:
+      - .env
     networks:
       - proxy-net
 

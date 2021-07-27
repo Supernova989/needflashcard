@@ -9,12 +9,12 @@ import (
 )
 
 type Word struct {
-	ID         *primitive.ObjectID `json:"id,omitempty" bson:"_id,omitempty"`
-	GroupID    *primitive.ObjectID `json:"groupId" bson:"groupId"`
-	Title      string              `json:"title" bson:"title"`
-	Definition string              `json:"definition" bson:"definition"`
-	Examples   []*WordExample      `json:"examples" bson:"examples"`
-	CreatedAt  time.Time           `json:"created_at" bson:"created_at"`
+	ID         *primitive.ObjectID   `json:"id,omitempty" bson:"_id,omitempty"`
+	GroupID    []*primitive.ObjectID `json:"groupId" bson:"groupId"`
+	Title      string                `json:"title" bson:"title"`
+	Definition string                `json:"definition" bson:"definition"`
+	Examples   []*WordExample        `json:"examples" bson:"examples"`
+	CreatedAt  time.Time             `json:"created_at" bson:"created_at"`
 }
 
 type WordExample struct {
@@ -23,6 +23,9 @@ type WordExample struct {
 }
 
 func (w *Word) Validate() (error, int) {
+	if len(w.GroupID) == 0 {
+		return fmt.Errorf("No group selected"), common.ErrorNoParentGroup
+	}
 	if len(w.Examples) == 0 {
 		return fmt.Errorf("No examples"), common.ErrorNoExamples
 	}

@@ -12,10 +12,10 @@ interface Props {
 
 export const GroupItem: FC<Props> = ({ group, onClick }) => {
   const classes = useStyles();
-  const { id, title, description, words, updated_at } = group;
+  const { id, title, description, words, created_at, updated_at } = group;
   const { t } = useTranslation();
 
-  const updated = moment(updated_at).format("HH:mm DD.MM.yyyy");
+  const updated = moment(updated_at || created_at).format("HH:mm DD.MM.yyyy");
   return (
     <article className={classes.root} onClick={onClick.bind(null, id)}>
       <h4 className="mb-2 truncate">{title}</h4>

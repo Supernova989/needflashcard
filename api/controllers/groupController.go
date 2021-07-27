@@ -88,6 +88,7 @@ var CreateGroup = func(srv services.IGroupService) http.HandlerFunc {
 		// reset ID field
 		group.ID = nil
 		group.CreatedAt = time.Now()
+		group.UpdatedAt = time.Now()
 		// grab UserId from the context and use it as the owner
 		group.UserID = &userId
 		err, code := group.Validate()

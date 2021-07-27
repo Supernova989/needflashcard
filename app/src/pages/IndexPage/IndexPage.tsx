@@ -3,7 +3,7 @@ import Page from "../../components/Page";
 
 const IndexPage: FC = () => {
   return (
-    <Page dataTestId="page-home">
+    <Page heading={"Dashboard"} dataTestId="page-home">
       I am Index page
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Earum molestias non quas sapiente similique.

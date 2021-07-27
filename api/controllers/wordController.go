@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"io/ioutil"
 	"log"
@@ -16,7 +15,6 @@ import (
 var CreateWord = func(srv services.IWordService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		word := m.Word{}
-		params := mux.Vars(r)
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			log.Println(err.Error())
@@ -36,7 +34,6 @@ var CreateWord = func(srv services.IWordService) http.HandlerFunc {
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorInvalidRequest)
 			return
 		}
-		groupId, err := primitive.ObjectIDFromHex(params["id"])
 		if err != nil {
 			log.Println(err.Error())
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorInvalidRequest)
@@ -48,7 +45,6 @@ var CreateWord = func(srv services.IWordService) http.HandlerFunc {
 			w.ID = nil
 		}
 		word.CreatedAt = time.Now()
-		word.GroupID = &groupId
 
 		err, code := word.Validate()
 		if err != nil {

@@ -15,6 +15,8 @@ var ErrorLongDefinition = 10019002
 var ErrorNoExamples = 10019003
 var ErrorTooManyExamples = 10019004
 var ErrorLongExample = 10019005
+var ErrorNoParentGroup = 10019006
+var ErrorInvalidObjectId = 10019007
 
 var ErrorShortPassword = 10020
 var ErrorLongPassword = 10021
