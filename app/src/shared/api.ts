@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { removeTrailingSlash } from "./utils";
 
 const apiClient = axios.create({
-  baseURL: removeTrailingSlash(process.env.REACT_APP_HOST_API) + "/api",
+  baseURL: removeTrailingSlash("http://" + process.env.REACT_APP_HOST_API) + "/api",
 });
 
 apiClient.interceptors.request.use(
