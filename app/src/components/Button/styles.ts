@@ -4,6 +4,9 @@ export const useStyles = createUseStyles({
   button: {
     transition: ".2s ease",
     borderWidth: 1,
+    display: "inline-flex",
+    flexShrink: 0,
+    alignItems: "center",
     paddingTop: "0.5rem",
     paddingRight: "0.5rem",
     paddingBottom: "0.5rem",
@@ -21,5 +24,15 @@ export const useStyles = createUseStyles({
         backgroundColor: "#2d44b1",
       },
     },
+  },
+  svg: {
+    width: 15,
+    height: 15,
+  },
+  svgLeft: {
+    marginRight: 7,
+  },
+  svgRight: {
+    marginLeft: 7,
   },
 });
