@@ -49,10 +49,13 @@ const BasicLayout: FC<Props> = ({ children, disableMenu }) => {
   const headerMenu = (
     <nav role="navigation">
       <Link to={ROUTES.GROUPS} className={clsx("ml-3")}>
-        Your Collections
+        Your Groups
       </Link>
       <Link to={ROUTES.PROFILE} className={clsx("ml-3")}>
         Profile
+      </Link>
+      <Link to={ROUTES.PROFILE} className={clsx("ml-3")}>
+        Logout
       </Link>
     </nav>
   );

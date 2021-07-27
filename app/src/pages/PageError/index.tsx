@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import img from "../assets/img/something-went-wrong.png";
+import img from "../../assets/img/something-went-wrong.png";
 import clsx from "clsx";
 import { createUseStyles } from "react-jss";
 

@@ -2,18 +2,19 @@ import React, { FC, lazy } from "react";
 import { Switch, Route, RouteComponentProps, Redirect } from "react-router-dom";
 import { ROUTES } from "./routes";
 import BasicLayout from "./layouts/BasicLayout";
+import LoginLayout from "./layouts/LoginLayout";
 import PrivateRoute from "./components/PrivateRoute";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
-import LoginLayout from "./layouts/LoginLayout";
-import AboutPage from "./pages/AboutPage";
-import Index from "./pages/ForgotPage";
 
-const IndexPage = lazy(() => import("./pages/IndexPage/IndexPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const ForgotPage = lazy(() => import("./pages/ForgotPage"));
+const IndexPage = lazy(() => import("./pages/IndexPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const GroupPage = lazy(() => import("./pages/GroupPage"));
 const GroupsPage = lazy(() => import("./pages/GroupsPage"));
-const ProfilePage = lazy(() => import("./pages/ProfilePage/ProfilePage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
 const App: FC = () => {
@@ -33,7 +34,24 @@ const App: FC = () => {
             return !isAuthorized ? page : <Redirect to={ROUTES.INDEX} />;
           }}
         />
-
+        <Route
+          path={ROUTES.REGISTER}
+          exact
+          component={() => (
+            <LoginLayout>
+              <RegisterPage />
+            </LoginLayout>
+          )}
+        />
+        <Route
+          path={ROUTES.FORGOT_PASSWORD}
+          exact
+          component={() => (
+            <LoginLayout>
+              <ForgotPage />
+            </LoginLayout>
+          )}
+        />
         <PrivateRoute
           path={ROUTES.INDEX}
           exact
@@ -70,21 +88,12 @@ const App: FC = () => {
             </BasicLayout>
           )}
         />
-        <Route
+        <PrivateRoute
           path={ROUTES.ABOUT}
           exact
           component={() => (
-            <BasicLayout disableMenu={true}>
+            <BasicLayout>
               <AboutPage />
-            </BasicLayout>
-          )}
-        />
-        <Route
-          path={ROUTES.FORGOT_PASSWORD}
-          exact
-          component={() => (
-            <BasicLayout disableMenu={true}>
-              <Index />
             </BasicLayout>
           )}
         />
