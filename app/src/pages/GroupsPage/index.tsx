@@ -14,6 +14,7 @@ import Page from "../../components/Page";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { getGroups } from "../../redux/reducers/@groups/actions";
+import AddGroupDialog from "./AddGroupDialog";
 
 const QUERY_MAX_LENGTH = 120;
 
@@ -31,6 +32,7 @@ const GroupsPage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { groups: groupState } = useSelector((state: RootState) => state);
   const [searchSuggestions, setSearchSuggestions] = useState<string[]>([]);
+  const [showAddDialog, setShowAddDialog] = useState<boolean>(false);
   const searchInputTimeoutRef = useRef<undefined | NodeJS.Timeout>();
   const searchRef = useClickAwayListener(() => setSearchSuggestions([]));
   useEffect(() => {
@@ -61,8 +63,8 @@ const GroupsPage: FC = () => {
   };
 
   return (
-    <Page heading={"Your collections"}>
-      <div className={"mb-3"}>
+    <Page heading={"Your groups"}>
+      <div className={"mt-2 mb-3"}>
         <Formik
           innerRef={formRef}
           initialValues={{ query: "" }}
@@ -77,6 +79,15 @@ const GroupsPage: FC = () => {
               autoCorrect="off"
               spellCheck={"false"}
             >
+              <Button
+                className={"mr-1"}
+                color="primary"
+                variant={"contained"}
+                startIcon={"PLUS"}
+                onClick={setShowAddDialog.bind(null, true)}
+              >
+                {t("BUTTONS.ADD_GROUP")}
+              </Button>
               <Input
                 name="query"
                 label={"Enter your search query here..."}
@@ -97,7 +108,7 @@ const GroupsPage: FC = () => {
                 }}
               />
 
-              <Button type="submit" variant={"contained"} color={"primary"}>
+              <Button type="submit" variant={"contained"} color={"primary"} startIcon={"SEARCH"}>
                 {t("COMMON.SEARCH")}
               </Button>
             </form>
@@ -114,6 +125,8 @@ const GroupsPage: FC = () => {
           );
         })}
       </ul>
+
+      <AddGroupDialog show={showAddDialog} onCancel={setShowAddDialog.bind(null, false)} />
     </Page>
   );
 };

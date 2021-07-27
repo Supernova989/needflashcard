@@ -1,5 +1,6 @@
 {
   "BUTTONS": {
+    "ADD_GROUP": "Add group",
     "LOGIN": "Login",
     "CONFIRM": "Confirm",
     "CANCEL": "Cancel",
