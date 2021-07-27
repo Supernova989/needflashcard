@@ -7,7 +7,7 @@ import { Formik, FormikProps } from "formik";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
-import { Link, RouteComponentProps, withRouter } from "react-router-dom";
+import { Link, RouteComponentProps, useHistory, withRouter } from "react-router-dom";
 import { ROUTES } from "../../routes";
 import Input from "../../components/Input";
 
@@ -40,6 +40,7 @@ const LoginPage: FC<RouteComponentProps & Props> = ({ referer, history }) => {
           onSubmit={async ({ email, password }, actions) => {
             try {
               await dispatch(authenticateUser({ email, password })).unwrap();
+              referer && history.push(referer);
             } catch (e) {
               let errorText = "";
               switch (e) {
