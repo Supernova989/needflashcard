@@ -35,6 +35,7 @@ const GroupsPage: FC = () => {
   const [showAddDialog, setShowAddDialog] = useState<boolean>(false);
   const searchInputTimeoutRef = useRef<undefined | NodeJS.Timeout>();
   const searchRef = useClickAwayListener(() => setSearchSuggestions([]));
+
   useEffect(() => {
     dispatch(getGroups());
     return () => {
@@ -43,8 +44,6 @@ const GroupsPage: FC = () => {
       }
     };
   }, []);
-
-  const handleLink = (id: string) => history.push(getGroupURL(id));
 
   const handlePickSuggestion = (suggestion: string) => {
     setSearchSuggestions([]);
@@ -79,15 +78,6 @@ const GroupsPage: FC = () => {
               autoCorrect="off"
               spellCheck={"false"}
             >
-              <Button
-                className={"mr-1"}
-                color="primary"
-                variant={"contained"}
-                startIcon={"PLUS"}
-                onClick={setShowAddDialog.bind(null, true)}
-              >
-                {t("BUTTONS.ADD_GROUP")}
-              </Button>
               <Input
                 name="query"
                 label={"Enter your search query here..."}
@@ -111,6 +101,17 @@ const GroupsPage: FC = () => {
               <Button type="submit" variant={"contained"} color={"primary"} startIcon={"SEARCH"}>
                 {t("COMMON.SEARCH")}
               </Button>
+
+              <Button
+                className={"ml-1"}
+                color="primary"
+                variant={"contained"}
+                startIcon={"PLUS"}
+                onClick={setShowAddDialog.bind(null, true)}
+              >
+                {t("BUTTONS.ADD_GROUP")}
+              </Button>
+              <Button className={"ml-1"} color="primary" variant={"contained"} startIcon={"FILTER"} />
             </form>
           )}
         </Formik>
@@ -120,7 +121,7 @@ const GroupsPage: FC = () => {
         {groupState.items.map((group) => {
           return (
             <li key={group.id} className={clsx("mb-3", classes.group)}>
-              <GroupItem group={group} onClick={handleLink} />
+              <GroupItem group={group} onClick={(id: string) => history.push(getGroupURL(id))} />
             </li>
           );
         })}

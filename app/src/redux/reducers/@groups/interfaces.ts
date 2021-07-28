@@ -1,11 +1,9 @@
-import { ResponsePagination } from "../../../shared/models";
+import { PaginationData, Response, ResponsePagination } from "../../../shared/models";
 import { Group } from "../../../shared/models";
 
 export type GetGroupsResponse = ResponsePagination<Group>;
+export type CreateGroupResponse = Response<Group>;
 
-export type PayloadSetGroups = {
-  groups: Group[];
-  size?: number;
-  page?: number;
-  total?: number;
-};
+export type PayloadAddGroup = Group;
+
+export type PayloadSetGroups = PaginationData<Group> & { query?: Object };

@@ -5,6 +5,9 @@ import { Formik, FormikProps } from "formik";
 import clsx from "clsx";
 import Input from "../../../components/Input";
 import * as Yup from "yup";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../redux/store";
+import { createGroup } from "../../../redux/reducers/@groups/actions";
 
 const TITLE_MIN_LENGTH = 3;
 const TITLE_MAX_LENGTH = 80;
@@ -25,6 +28,7 @@ interface Props {
 
 const AddGroupDialog: FC<Props> = ({ show, onCancel }) => {
   const { t } = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
   const formRef = useRef<FormikProps<AddGroupFormFields> | null>(null);
   const [canConfirm, setCanConfirm] = useState<boolean>(false);
 
@@ -34,14 +38,19 @@ const AddGroupDialog: FC<Props> = ({ show, onCancel }) => {
     }
   }, [show]);
 
-  const onConfirm = () => {};
+  const onConfirm = () => formRef.current?.submitForm();
 
   const form = (
     <Formik
       innerRef={formRef}
       initialValues={{ title: "", description: "" }}
       validationSchema={addGroupSchema}
-      onSubmit={({}, actions) => {}}
+      onSubmit={async ({ title, description }, actions) => {
+        try {
+          await dispatch(createGroup({ title, description })).unwrap();
+          onCancel();
+        } catch (e) {}
+      }}
     >
       {({ values, touched, errors, ...props }) => (
         <form
@@ -55,12 +64,14 @@ const AddGroupDialog: FC<Props> = ({ show, onCancel }) => {
             name="title"
             label={"Title"}
             block={true}
+            required
             onChange={props.handleChange}
             onBlur={props.handleBlur}
             value={values.title}
             error={t(errors.title!)}
             touched={touched.title}
             maxLength={TITLE_MAX_LENGTH}
+            className={"mb-1"}
           />
 
           <br />
@@ -69,6 +80,7 @@ const AddGroupDialog: FC<Props> = ({ show, onCancel }) => {
             name="description"
             label={"Short and clear description"}
             block={true}
+            required
             onChange={props.handleChange}
             onBlur={props.handleBlur}
             value={values.description}

@@ -23,9 +23,11 @@ const Button: FC<Props> = (props) => {
 
   return (
     <button type={type} {...rest} className={clsx(className, classes.button, color)} disabled={isDisabled}>
-      {startIcon && <Svg className={clsx(classes.svg, classes.svgLeft)} name={startIcon} />}
-      {children}
-      {endIcon && <Svg className={clsx(classes.svg, classes.svgRight)} name={endIcon} />}
+      {startIcon && <Svg className={clsx(classes.svg)} name={startIcon} />}
+      {children && (
+        <span className={clsx({ [classes.svgLeft]: startIcon, [classes.svgRight]: endIcon })}>{children}</span>
+      )}
+      {endIcon && <Svg className={clsx(classes.svg)} name={endIcon} />}
     </button>
   );
 };

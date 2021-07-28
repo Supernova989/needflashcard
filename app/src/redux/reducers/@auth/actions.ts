@@ -1,14 +1,15 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { Payload } from "./index";
-import { LOG_IN } from "../../types";
+import { AUTHENTICATE, LOG_IN, LOG_OUT } from "../../types";
 import { AppAsyncThunkApi } from "../../store";
 import { BackendLoginResponse } from "./interfaces";
 import apiClient from "../../../shared/api";
 
 export const login = createAction<Payload>(LOG_IN);
+export const logout = createAction(LOG_OUT);
 
 export const authenticateUser = createAsyncThunk<number, { email: string; password: string }, AppAsyncThunkApi>(
-  "AUTHENTICATE",
+  AUTHENTICATE,
   async ({ email, password }, { dispatch, rejectWithValue }) => {
     try {
       const response = await apiClient.request<BackendLoginResponse>({

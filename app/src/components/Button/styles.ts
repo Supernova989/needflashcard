@@ -2,6 +2,7 @@ import { createUseStyles } from "react-jss";
 
 export const useStyles = createUseStyles({
   button: {
+    userSelect: "none",
     transition: ".2s ease",
     borderWidth: 1,
     display: "inline-flex",
@@ -30,9 +31,9 @@ export const useStyles = createUseStyles({
     height: 15,
   },
   svgLeft: {
-    marginRight: 7,
+    marginLeft: 7,
   },
   svgRight: {
-    marginLeft: 7,
+    marginRight: 7,
   },
 });

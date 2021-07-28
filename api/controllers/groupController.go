@@ -31,6 +31,7 @@ var FindGroups = func(srv services.IGroupService) http.HandlerFunc {
 		if q != "" {
 			err := json.Unmarshal([]byte(q), &filter)
 			if err != nil {
+				log.Println("FindGroups()", err.Error())
 				cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorInvalidRequest)
 				return
 			}
@@ -38,13 +39,14 @@ var FindGroups = func(srv services.IGroupService) http.HandlerFunc {
 		cp := r.Context().Value(0).(cmn.ContextPayload)
 		userId, err := primitive.ObjectIDFromHex(cp.Get("user"))
 		if err != nil {
+			log.Println("FindGroups()", err.Error())
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorInvalidRequest)
 			return
 		}
 		filter["userId"] = userId
 		res, total, err := srv.Find(filter, int64(page*size), int64(size))
 		if err != nil {
-			log.Println(err.Error())
+			log.Println("FindGroups()", err.Error())
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
 			return
 		}
@@ -58,6 +60,7 @@ var GetGroup = func(srv services.IGroupService) http.HandlerFunc {
 		id := params["id"]
 		res, err := srv.Get(id)
 		if err != nil {
+			log.Println("GetGroup()", err.Error())
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
 			return
 		}
@@ -70,18 +73,20 @@ var CreateGroup = func(srv services.IGroupService) http.HandlerFunc {
 		group := m.Group{}
 		body, err := ioutil.ReadAll(r.Body)
 		if err != nil {
+			log.Println("CreateGroup()", err.Error())
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
 			return
 		}
 		err = json.Unmarshal(body, &group)
 		if err != nil {
+			log.Println("CreateGroup()", err.Error())
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
 			return
 		}
 		cp := r.Context().Value(0).(cmn.ContextPayload)
 		userId, err := primitive.ObjectIDFromHex(cp.Get("user"))
 		if err != nil {
-			log.Println(err.Error())
+			log.Println("CreateGroup()", err.Error())
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &cmn.ErrorInvalidRequest)
 			return
 		}
@@ -93,12 +98,13 @@ var CreateGroup = func(srv services.IGroupService) http.HandlerFunc {
 		group.UserID = &userId
 		err, code := group.Validate()
 		if err != nil {
-			log.Println(err.Error())
+			log.Println("CreateGroup()", err.Error())
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, &code)
 			return
 		}
 		res, err := srv.Insert(group)
 		if err != nil {
+			log.Println("CreateGroup()", err.Error())
 			cmn.WriteJsonResponse(w, nil, http.StatusBadRequest, nil)
 			return
 		}
@@ -106,7 +112,7 @@ var CreateGroup = func(srv services.IGroupService) http.HandlerFunc {
 	}
 }
 
-var PatchPost = func(srv services.IGroupService) http.HandlerFunc {
+var PatchGroup = func(srv services.IGroupService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
 		id := params["id"]
@@ -131,7 +137,7 @@ var PatchPost = func(srv services.IGroupService) http.HandlerFunc {
 	}
 }
 
-var DeletePost = func(srv services.IGroupService) http.HandlerFunc {
+var DeleteGroup = func(srv services.IGroupService) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		params := mux.Vars(r)
 		id := params["id"]

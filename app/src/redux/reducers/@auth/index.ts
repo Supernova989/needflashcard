@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { login } from "./actions";
+import { login, logout } from "./actions";
 
 const storage: Storage = localStorage;
 const TOKEN_STORAGE_NAME = "__token";
@@ -25,5 +25,9 @@ export const reducer = createReducer(initialState, (builder) => {
     if (payload.token) {
       storage.setItem(TOKEN_STORAGE_NAME, payload.token);
     }
+  });
+  builder.addCase(logout, (state, {}) => {
+    state.token = undefined;
+    state.userID = undefined;
   });
 });

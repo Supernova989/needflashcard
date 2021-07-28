@@ -17,7 +17,7 @@ export const GroupItem: FC<Props> = ({ group, onClick }) => {
 
   const updated = moment(updated_at || created_at).format("HH:mm DD.MM.yyyy");
   return (
-    <article className={classes.root} onClick={onClick.bind(null, id)}>
+    <article className={classes.root} onClick={onClick.bind(null, id!)}>
       <h4 className="mb-2 truncate">{title}</h4>
       <p className="description">{description}</p>
       <footer className={clsx(classes.footer)}>
