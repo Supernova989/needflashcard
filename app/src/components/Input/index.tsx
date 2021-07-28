@@ -1,6 +1,8 @@
 import { FC, forwardRef } from "react";
 import clsx from "clsx";
 import { useStyles } from "./styles";
+import { SearchWordSuggestion } from "../../redux/reducers/@wordSearch/interfaces";
+import { Suggestion } from "../../shared/models";
 
 interface Props {
   name: string;
@@ -15,8 +17,8 @@ interface Props {
   touched?: boolean;
   block?: boolean;
   autoCompletion?: {
-    list: string[];
-    onClick: (value: string) => void;
+    list: Suggestion[];
+    onSelect: (value: string) => void;
   };
   testId?: string;
   [s: string]: any;
@@ -45,8 +47,12 @@ const Input = forwardRef<HTMLDivElement, Props>((props, ref) => {
     <div className={clsx(classes.autoCompletion)}>
       {autoCompletion?.list.map((suggestion, i) => {
         return (
-          <div key={i} onClick={autoCompletion.onClick?.bind(null, suggestion)} className={classes.autoCompletionItem}>
-            {suggestion}
+          <div
+            key={suggestion.id}
+            onClick={autoCompletion.onSelect?.bind(null, suggestion.id)}
+            className={classes.autoCompletionItem}
+          >
+            {suggestion.title}
           </div>
         );
       })}

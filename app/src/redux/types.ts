@@ -5,3 +5,5 @@ export const CREATE_GROUP = "@groups/CREATE_GROUP";
 export const ADD_GROUP = "@groups/ADD_GROUP";
 export const GET_GROUPS = "@groups/GET_GROUPS";
 export const SET_GROUPS = "@groups/SET_GROUPS";
+export const SEARCH_WORDS = "@word-search/SEARCH_WORDS";
+export const ADD_WORD_SUGGESTIONS = "@word-search/ADD_WORD_SUGGESTIONS";

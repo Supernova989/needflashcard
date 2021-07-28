@@ -63,7 +63,7 @@ const SimpleModal: FC<Props> = (props) => {
             <Button className={clsx("mr-1")} type="button" color={"secondary"} variant={"outlined"} onClick={onCancel}>
               Cancel
             </Button>
-            <Button type="button" color={"primary"} variant={"contained"} disabled={!canConfirm} onClick={onConfirm}>
+            <Button type="button" color={"primary"} variant={"contained"} isDisabled={!canConfirm} onClick={onConfirm}>
               Confirm
             </Button>
           </div>

@@ -30,7 +30,7 @@ const AddGroupDialog: FC<Props> = ({ show, onCancel }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const formRef = useRef<FormikProps<AddGroupFormFields> | null>(null);
-  const [canConfirm, setCanConfirm] = useState<boolean>(false);
+  // const [canConfirm, setCanConfirm] = useState<boolean>(false);
 
   useEffect(() => {
     if (show) {
@@ -98,7 +98,7 @@ const AddGroupDialog: FC<Props> = ({ show, onCancel }) => {
       heading={"Add group"}
       body={form}
       show={show}
-      canConfirm={canConfirm}
+      canConfirm={true}
       onCancel={onCancel}
       onConfirm={onConfirm}
     />

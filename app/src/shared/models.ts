@@ -38,7 +38,10 @@ export interface Word {
     text: string;
   }[];
 }
-
+export interface Suggestion {
+  title: string;
+  id: string;
+}
 export enum Language {
   English,
   Russian,

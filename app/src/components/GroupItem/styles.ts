@@ -11,7 +11,7 @@ export const useStyles = createUseStyles({
     paddingBottom: "2rem",
     cursor: "pointer",
     "&:hover": {
-      backgroundColor: "#c1e",
+      backgroundColor: "#cfcfcf",
     },
   },
   footer: {

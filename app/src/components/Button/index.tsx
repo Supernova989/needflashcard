@@ -11,18 +11,23 @@ interface Props {
   className?: string;
   startIcon?: SvgName;
   endIcon?: SvgName;
-  variant: ButtonVariant;
+  variant?: ButtonVariant;
   color: ButtonColor;
+  onClick?: React.MouseEventHandler;
   type?: "submit" | "reset" | "button";
-  [x: string]: any;
 }
 
 const Button: FC<Props> = (props) => {
-  const { children, className, color, type, startIcon, endIcon, isDisabled, ...rest } = props;
+  const { children, className, color, onClick, type, startIcon, endIcon, isDisabled, variant } = props;
   const classes = useStyles();
 
   return (
-    <button type={type} {...rest} className={clsx(className, classes.button, color)} disabled={isDisabled}>
+    <button
+      type={type}
+      onClick={onClick}
+      className={clsx(className, classes.button, color, variant)}
+      disabled={isDisabled}
+    >
       {startIcon && <Svg className={clsx(classes.svg)} name={startIcon} />}
       {children && (
         <span className={clsx({ [classes.svgLeft]: startIcon, [classes.svgRight]: endIcon })}>{children}</span>
@@ -35,6 +40,7 @@ const Button: FC<Props> = (props) => {
 Button.defaultProps = {
   isDisabled: false,
   className: "",
+  variant: "contained",
   type: "button",
 };
 

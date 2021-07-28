@@ -17,6 +17,10 @@ export function getGroupURL(id: string): string {
   return ROUTES.GROUP.replace(/:id/, id);
 }
 
+export function getWordURL(id: string): string {
+  return ROUTES.WORD.replace(/:id/, id);
+}
+
 export function removeTrailingSlash(url?: string): string {
   return (url || "").trim().replace(/(\/)*$/, "");
 }

@@ -2,9 +2,12 @@ import { createUseStyles } from "react-jss";
 
 export const useStyles = createUseStyles({
   button: {
+    appearance: "none",
     userSelect: "none",
     transition: ".2s ease",
     borderWidth: 1,
+    borderColor: "inherit",
+    borderStyle: "solid",
     display: "inline-flex",
     flexShrink: 0,
     alignItems: "center",
@@ -19,10 +22,44 @@ export const useStyles = createUseStyles({
       backgroundColor: "#cecece !important",
     },
     "&.primary": {
-      color: "#FFFFFF",
-      backgroundColor: "#4366ff",
-      "&:hover": {
-        backgroundColor: "#2d44b1",
+      "&.contained": {
+        color: "#FFFFFF",
+        backgroundColor: "#4366ff",
+        borderColor: "#4366ff",
+        "&:hover": {
+          backgroundColor: "#2d44b1",
+          borderColor: "#2d44b1",
+        },
+      },
+      "&.outlined": {
+        color: "#4366ff",
+        backgroundColor: "#FFFFFF00",
+        borderColor: "#000000",
+        "&:hover": {
+          color: "#FFFFFF",
+          backgroundColor: "#2d44b1",
+          borderColor: "#2d44b1",
+        },
+      },
+    },
+    "&.secondary": {
+      "&.contained": {
+        color: "#FFFFFF",
+        backgroundColor: "#000000",
+        borderColor: "#000000",
+        "&:hover": {
+          color: "#000000",
+          backgroundColor: "#FFFFFF",
+        },
+      },
+      "&.outlined": {
+        color: "#000000",
+        backgroundColor: "#FFFFFF00",
+        borderColor: "#000000",
+        "&:hover": {
+          color: "#FFFFFF",
+          backgroundColor: "#000000",
+        },
       },
     },
   },

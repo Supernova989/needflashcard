@@ -14,6 +14,8 @@ const IndexPage = lazy(() => import("./pages/IndexPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const GroupPage = lazy(() => import("./pages/GroupPage"));
 const GroupsPage = lazy(() => import("./pages/GroupsPage"));
+const WordPage = lazy(() => import("./pages/WordPage"));
+const WordSearchResultPage = lazy(() => import("./pages/WordSearchResultPage"));
 const AboutPage = lazy(() => import("./pages/AboutPage"));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
 
@@ -58,6 +60,24 @@ const App: FC = () => {
           component={() => (
             <BasicLayout>
               <IndexPage />
+            </BasicLayout>
+          )}
+        />
+        <PrivateRoute
+          path={ROUTES.WORD_SEARCH}
+          exact
+          component={() => (
+            <BasicLayout>
+              <WordSearchResultPage />
+            </BasicLayout>
+          )}
+        />
+        <PrivateRoute
+          path={ROUTES.WORD}
+          exact
+          component={() => (
+            <BasicLayout>
+              <WordPage />
             </BasicLayout>
           )}
         />

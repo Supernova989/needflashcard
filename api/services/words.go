@@ -12,7 +12,7 @@ import (
 type IWordService interface {
 	Get(string) (*m.Word, error)
 	Insert(word m.Word, user primitive.ObjectID) (*m.Word, error)
-	//Find(interface{}) ([]m.User, error)
+	Find(filter primitive.D) ([]*map[string]interface{}, error)
 	//Delete(string) (m.ResponseDelete, error)
 	//CheckIfExists(email string, username string) (bool, error)
 	//Authenticate(email string, password string) (error, int, string, *m.User)
@@ -72,4 +72,24 @@ func (c *WordService) Insert(doc m.Word, user primitive.ObjectID) (*m.Word, erro
 	}
 	id := inserted.InsertedID.(primitive.ObjectID).Hex()
 	return c.Get(id)
+}
+
+func (c *WordService) Find(filter primitive.D) ([]*map[string]interface{}, error) {
+	words := make([]*map[string]interface{}, 0)
+	showLoadedStructCursor, err := c.Col.Aggregate(c.Ctx, mongo.Pipeline{
+		bson.D{{"$match", filter}},
+		bson.D{{"$limit", 11}},
+		bson.D{{"$project", bson.D{
+			{"_id", 0},
+			{"id", "$_id"},
+			{"title", "$title"},
+		}}},
+	})
+	if err != nil {
+		return nil, err
+	}
+	if err = showLoadedStructCursor.All(c.Ctx, &words); err != nil {
+		return nil, err
+	}
+	return words, nil
 }

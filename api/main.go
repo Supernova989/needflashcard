@@ -48,6 +48,8 @@ func main() {
 	r.Handle("/api/v1/groups/{id}", mw.JwtAuthMiddleware(controllers.PatchGroup(groupService), userService)).Methods("PATCH", "OPTIONS")
 	r.Handle("/api/v1/groups/{id}", mw.JwtAuthMiddleware(controllers.DeleteGroup(groupService), userService)).Methods("DELETE", "OPTIONS")
 
+	r.Handle("/api/v1/words", mw.JwtAuthMiddleware(controllers.FindWords(wordService, groupService), userService)).Methods("GET", "OPTIONS")
+	r.Handle("/api/v1/words/{id}", mw.JwtAuthMiddleware(controllers.GetWord(wordService), userService)).Methods("GET", "OPTIONS")
 	r.Handle("/api/v1/words", mw.JwtAuthMiddleware(controllers.CreateWord(wordService), userService)).Methods("POST", "OPTIONS")
 
 	//On start

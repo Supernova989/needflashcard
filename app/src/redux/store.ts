@@ -1,12 +1,14 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import { reducer as authReducer } from "./reducers/@auth";
 import { reducer as groupReducer } from "./reducers/@groups";
+import { reducer as wordSearchReducer } from "./reducers/@wordSearch";
 import logger from "redux-logger";
 import { BaseThunkAPI } from "@reduxjs/toolkit/dist/createAsyncThunk";
 
 export const rootReducer = {
   auth: authReducer,
   groups: groupReducer,
+  wordSearch: wordSearchReducer,
 };
 
 const store = configureStore({
